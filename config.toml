@@ -1,0 +1,16 @@
+baseURL = "http://example.org/"
+languageCode = "en-us"
+title = "Web Apps in Lisp - Know-how"
+
+theme = "relearn"
+
+[params]
+  collapsibleMenu = true
+  author = "vindarel"
+  # themeVariant = "relearn-light"
+
+# For search functionality
+[outputs]
+home = [ "HTML", "RSS", "JSON"]
+section = ["HTML", "RSS", "PRINT"]
+page = ["HTML", "RSS", "PRINT"]
