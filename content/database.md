@@ -1,7 +1,7 @@
 
 +++
 title = "Connecting to a database"
-weight = 17
+weight = 130
 +++
 
 Please see the [databases section](databases.html). The Mito ORM
@@ -138,4 +138,3 @@ library.
 ~~~
 
 *Credit: `/u/arvid` on [/r/learnlisp](https://www.reddit.com/r/learnlisp/comments/begcf9/can_someone_give_me_an_eli5_on_hiw_to_encrypt_and/)*.
-

@@ -1,6 +1,6 @@
 +++
 title = "Static assets"
-weight = 16
+weight = 25
 +++
 
 

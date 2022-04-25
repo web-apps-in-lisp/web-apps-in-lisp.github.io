@@ -1,5 +1,5 @@
 
-## Web apps in Lisp
+## Web Apps in Lisp: Know-how
 
 You want to write a web application in Common Lisp and you don't know
 where to start? Or you don't want to re-invent the wheel? Follow the guide.
@@ -92,7 +92,13 @@ We will learn:
 
 Your feedback and contributions are appreciated!
 
-Now let's start with a [frameworks overview](/frameworks).
+**In [part 1](/part-1/), we will get to know a classical stack: Hunchentoot, easy-routes for easier routing and Djula templates.**
+
+In part 2, we will add interactivity on the client side, with or without JavaScript.
+
+In part 3, we will build an interactive Ajax-based Todo-app without writing any JavaScript, thanks to ISSR and Weblocks.
+
+Now let's start with a [libraries overview](/part 1/).
 
 
 {{% notice note  %}}
@@ -104,6 +110,15 @@ Now let's start with a [frameworks overview](/frameworks).
 If you find similar content from the Cookbook, this is normal. I am the main contributor and I wrote the web page there. This guide wants to be more complete and more advanced.
 
 {{% /notice %}}
+
+
+{{% notice info %}}
+
+Here's a 5 minutes refresh on how to create a project, how to run it from sources, how to build a binary and how to load everything in SLIME:
+
+{{% /notice %}}
+
+{{< youtube XFc513MJjos >}}
 
 
 [hunchentoot]: https://edicl.github.io/hunchentoot

@@ -1,19 +1,27 @@
+
 +++
-title = "Frameworks overview"
-weight = 10
+title = "Building blocks"
+weight = 1
 +++
 
+In this chapter we'll start by creating our first route, we'll serve
+local files and we'll run more than one web app in the same running
+image.
 
-[Hunchentoot][hunchentoot] and [Clack][clack] are two projects that
-you'll often hear about.
+Let's install the libraries we'll use:
+
+~~~lisp
+(ql:quickload '("hunchentoot" "easy-routes" "djula" "spinneret"))
+~~~
 
 {{% notice info %}}
-
-CL-USER> `(ql:quickload "hunchentoot")`
-
+You can create a web project with our project generator: [cl-cookieweb](https://github.com/vindarel/cl-cookieweb).
 {{% /notice %}}
 
-Hunchentoot is
+
+We will use the [Hunchentoot][hunchentoot] web server, but we should say a few words about [Clack][clack] too.
+
+**Hunchentoot** is
 
 > a web server and at the same time a toolkit for building dynamic websites. As a stand-alone web server, Hunchentoot is capable of HTTP/1.1 chunking (both directions), persistent connections (keep-alive), and SSL. It provides facilities like automatic session handling (with and without cookies), logging, customizable error handling, and easy access to GET and POST parameters sent by the client.
 
@@ -26,7 +34,7 @@ write a function for the `:uri` parameter that does the check, when it
 is a built-in keyword in other frameworks. We will use
 the `easy-routes` library for that.
 
-Clack is
+**Clack** is
 
 > a web application environment for Common Lisp inspired by Python's WSGI and Ruby's Rack.
 
@@ -69,11 +77,6 @@ For a full list of libraries for the web, please see the [awesome-cl list
 #network-and-internet](https://github.com/CodyReichert/awesome-cl#network-and-internet)
 and [Cliki](https://www.cliki.net/Web).
 
-**In [part 1](/part-1/), we will use a classical stack: Hunchentoot, easy-routes for easier routing and Djula templates.**
-
-In part 2, we will add Ajax interactivity on the client side with some pure JavaScript and some Vue.js.
-
-In part 3, we will build an interactive Ajax-based Todo-app without writing any JavaScript, thanks to ISSR, and Weblocks.
 
 
 [hunchentoot]: https://edicl.github.io/hunchentoot

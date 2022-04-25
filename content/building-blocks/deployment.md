@@ -1,6 +1,6 @@
 +++
 title = "Deployment"
-weight = 100
+weight = 200
 +++
 
 
@@ -17,16 +17,7 @@ We must ensure:
 - to install the required dependencies (this demands we have installed Quicklisp previously)
 - and to run our application's entry point.
 
-{{% notice info %}}
-
-Here's a 5 minutes refresh on how to create a project, how to run it from sources, how to build a binary, how to load everything in SLIME:
-
-{{% /notice %}}
-
-{{< youtube XFc513MJjos >}}
-
-
-So, the recipe to run our project from sources can look like this:
+So, the recipe to run our project from sources can look like this (you can find such a recipe in our project generator):
 
 ~~~lisp
 ;; run.lisp

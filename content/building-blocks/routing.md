@@ -1,104 +1,16 @@
-
 +++
-title = "Part 1: first project"
+title = "Routing"
 weight = 15
 +++
 
-Let's install the libraries we'll use:
-
-~~~lisp
-(ql:quickload '("hunchentoot" "easy-routes" "spinneret" "djula"))
-~~~
-
-We'll start by creating our first route, we'll serve local files and
-we'll run more than one web app in the same running image.
 
 {{% notice info %}}
 
-You can create a web project with our project generator: [cl-cookieweb](https://github.com/vindarel/cl-cookieweb).
+I prefer the easy-routes library than pure Hunchentoot to define routes, skip to its section if you want.
 
 {{% /notice %}}
 
-
-## Simple webserver
-
-### Serve local files
-
-Create and start a webserver like this:
-
-~~~lisp
-(defvar *acceptor* (make-instance 'hunchentoot:easy-acceptor :port 4242))
-(hunchentoot:start *acceptor*)
-~~~
-
-We create an instance of `easy-acceptor` on port 4242 and we start
-it. We can now access [http://127.0.0.1:4242/](http://127.0.0.1:4242/). You should get a welcome
-screen with a link to the documentation and logs to the console.
-
-By default, Hunchentoot serves the files from the `www/` directory in
-its source tree. Thus, if you go to the source of
-`easy-acceptor` (`M-.` in Slime), which is probably
-`~/quicklisp/dists/quicklisp/software/hunchentoot-v1.2.38/`, you'll
-find the `root/` directory. It contains:
-
-- an `errors/` directory, with the error templates `404.html` and `500.html`,
-- an `img/` directory,
-- an `index.html` file.
-
-To serve another directory, we give the option `document-root` to
-`easy-acceptor`. We can also set the slot with its accessor:
-
-~~~lisp
-(setf (hunchentoot:acceptor-document-root *acceptor*) #p"path/to/www")
-~~~
-
-Let's create our `index.html` first. Put this in a new
-`www/index.html` at the current directory (of the lisp repl):
-
-~~~html
-<html>
-  <head>
-    <title>Hello!</title>
-  </head>
-  <body>
-    <h1>Hello local server!</h1>
-    <p>
-    We just served our own files.
-    </p>
-  </body>
-</html>
-~~~
-
-Let's start a new acceptor on a new port:
-
-~~~lisp
-(defvar *my-acceptor* (make-instance 'hunchentoot:easy-acceptor :port 4444
-                                   :document-root #p"www/"))
-(hunchentoot:start *my-acceptor*)
-~~~
-
-go to [http://127.0.0.1:4444/](http://127.0.0.1:4444/) and see the difference.
-
-Note that we just created another web application on a different port on
-the same lisp image. This is already pretty cool.
-
-
-## Access your server from the internet
-
-With Hunchentoot we have nothing to do, we can see the server from the
-internet right away.
-
-If you evaluate this on your VPS:
-
-    (hunchentoot:start (make-instance 'hunchentoot:easy-acceptor :port 4242))
-
-You can see it right away on your server's IP.
-
-Stop it with `(hunchentoot:stop *)`.
-
-## Routing
-
-> Note: you can skip to the easy-routes part if you want.
+## Hunchentoot
 
 ### The dispatch table
 
@@ -182,7 +94,7 @@ It also has a `default-parameter-type` which we'll use in a minute to get url pa
 There are also keys to know for the lambda list. Please see the documentation.
 
 
-### Easy-routes
+## Easy-routes
 
 [easy-routes](https://github.com/mmontone/easy-routes) is a route
 handling extension on top of Hunchentoot. It provides:
@@ -310,24 +222,3 @@ or a compound list:
 - `'(:hash-table <type>)`
 
 where `<type>` is a simple type.
-
-
-<!-- ## Sessions -->
-
-<!-- ## Cookies -->
-
-## Error handling
-
-In all frameworks, we can choose the level of interactivity. The web
-framework can return a 404 page and print output on the repl, it can
-catch errors and invoke the interactive lisp debugger, or it can show
-the lisp backtrace on the html page.
-
-### Hunchentoot
-
-The global variables to set are `*catch-errors-p*`,
-`*show-lisp-errors-p*` and `*show-lisp-backtraces-p*`.
-
-Hunchentoot also defines condition classes.
-
-See the documentation: [https://edicl.github.io/hunchentoot/#conditions](https://edicl.github.io/hunchentoot/#conditions).
