@@ -1,0 +1,3 @@
+
+run:
+	./hugo serve
