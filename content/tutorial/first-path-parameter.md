@@ -1,5 +1,5 @@
 +++
-title = "Part 1: the first path parameter"
+title = "the first path parameter"
 weight = 20
 +++
 
@@ -137,7 +137,7 @@ Here are mine:
 
 yeah I'm just printing the product, as a list, very simply.
 
-I added a `get-product (n)` function helper.
+I added a `get-product (n)` helper function. You should edit `products` to use it too.
 
 However I don't like the copy-pasting between `render-product` and `render-products` so I'll fix it. Can you too?
 

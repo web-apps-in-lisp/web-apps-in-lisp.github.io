@@ -1,5 +1,5 @@
 +++
-title = "Part 1: the first URL parameter"
+title = "the first URL parameter"
 weight = 100
 +++
 
@@ -56,7 +56,7 @@ So:
 {% if debug %} debug info! {% endif %}
 ```
 
-And add arguments to the `render` function:
+And pass the variable to the `render` function:
 
 ```lisp
 (render *template-product*
@@ -108,14 +108,12 @@ Our app looks like this:
 </body>
 ")
 
-(defun products (&optional (n 5))
-  (loop for i from 0 below n
-        collect (list i
-                      (format nil "Product nb ~a" i)
-                      9.99)))
-
 (defun get-product (n)
   (list n (format nil "Product nb ~a" n) 9.99))
+
+(defun products (&optional (n 5))
+  (loop for i from 0 below n
+        collect (get-product i)))
 
 (defun render (template &rest args)
   (apply
@@ -137,11 +135,11 @@ Our app looks like this:
   (format t "~&Starting the web server on port ~a" port)
   (force-output)
   (setf *server* (make-instance 'easy-routes:easy-routes-acceptor
-                                :port (or port *port*)))
+                                :port port))
   (hunchentoot:start *server*))
 ```
 
-Everything is contained in one file (don't forget the .asd), and we
+Everything is contained in one file, and we
 can run everything from sources or we can build a self-contained
 binary. Pretty cool!
 

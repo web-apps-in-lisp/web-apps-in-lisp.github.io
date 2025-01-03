@@ -1,6 +1,6 @@
 +++
 title = "Bonus: pimp your CSS"
-weight = 1000
+weight = 250
 +++
 
 ## Bonus: pimp your CSS
@@ -54,8 +54,15 @@ So, for instance:
 ")
 ```
 
-Note how our root template is benefiting from the CSS, and not the
-product page. The two pages should inherit from a base template. It's
-about time we setup our templates in their own directory.
-
 Refresh [http://localhost:8899/?query=one](http://localhost:8899/?query=one). Do you enjoy the difference?!
+
+I see this:
+
+![](/tutorial/web-app.png?lightbox=false&shadow=true)
+
+ 
+
+However note how our root template is benefiting from the CSS, and the
+product page isn't. The two pages should inherit from a base
+template. It's about time we setup our templates in their own
+directory.

@@ -1,13 +1,15 @@
 +++
-title = "Part 1: Getting Started"
+title = "Getting Started"
 weight = -1
 +++
 
-We will:
+In this application we will:
 - define a list of products, stored in a dummy database,
 - we'll have an index page with a search form,
 - we'll display search results,
 - and have one page per product to see it in details.
+
+But everything starts with a project (a *system* in Lisp parlance) definition.
 
 ## Setting up the project
 
@@ -29,50 +31,35 @@ Create the file `myproject.asd` at the project root:
                :hunchentoot  ;; web server
                :easy-routes  ;; routes facility
                :djula        ;; HTML templates
-
-               ;; utils
-               :local-time   ;; time
-               :str          ;; strings library
-               :cl-ppcre     ;; regex
-               :cl-slug      ;; slugs for URIs
-
-               ;; devel
-               :log4cl       ;; logging
                )
   :components ((:module "src"  ;; a src/ subdirectory
                 :components
                 (
-                 (:file "packages")  ;; = src/packages.lisp
                  (:file "myproject") ;; = src/myproject.lisp
                 )))
-
-  ;; To build a binary:
-  :build-operation "program-op"
-  :build-pathname "myproject"
-  :entry-point "myproject::main"  ;; supposing a `main` function exists.
 
   :description "A list of products")
 ```
 
-Now create a `src/` subdirectory, in which you'll create the two files mentioned in the .asd.
+Now create a `src/` subdirectory, in which you'll create the one file mentioned in the .asd.
 
-In `src/packages.lisp`, let's create one package for our app:
+In `src/myproject.lisp`, add this:
 
 ```lisp
 (defpackage myproject
   (:use :cl))
-```
 
-We prefer to put the package(s) definition(s) in their own file,
-because we find it easier to make the application grow.
-
-In `src/myproject.lisp`, add this important line:
-
-```lisp
 (in-package :myproject)
 
 ;; Here our application code.
 ```
+
+We created a Lisp *package*, a namespace if you want, and we made sure
+that the rest of our code will be written for this package. By
+default, we are in the `cl-user` package.
+
+Sometimes the package definition is done in its own `packages.lisp`
+file: I like this approach for applications that grow.
 
 we are now done with our project skeleton. Let's compile and load our
 project *and its dependencies*.
@@ -92,6 +79,15 @@ To load "myproject":
   Load 1 ASDF system:
     myproject
 ; Loading "myproject"
+..................................................
+[package cl-syntax]...............................
+[package cl-locale.core]..........................
+[package cl-locale.reader]........................
+[package cl-locale.syntax]........................
+[package cl-locale]...............................
+[package portable-pathnames]......................
+[package djula]...................................
+...
 
 ("myproject")
 ```
@@ -125,4 +121,3 @@ this returns:
 ```
 
 That's not much, but that's enough to show content in a web app, which we'll do next.
-

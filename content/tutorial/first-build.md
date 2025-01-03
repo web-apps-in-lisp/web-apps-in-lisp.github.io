@@ -1,5 +1,5 @@
 +++
-title = "Part 1: the first build"
+title = "the first build"
 weight = 300
 +++
 
@@ -83,7 +83,8 @@ To load "myproject":
     myproject
 ; Loading "myproject"
 ..............
-Starting the web server on port 8899 While evaluating the form starting at line 5, column 0
+Starting the web server on port 8899
+While evaluating the form starting at line 5, column 0
   of #P"/home/vince/projets/web-apps-in-lisp/walk/walk-book/content/tutorial/run.lisp":
 
 debugger invoked on a USOCKET:ADDRESS-IN-USE-ERROR in thread
@@ -141,7 +142,7 @@ To use another port, what would you prefer?
 - we can give the port as an argument on the command line, like `--port 9000`.
 - we can find the next available port.
 
-Let's start with the latter.
+Let's do the latter.
 
 
 ## Find a port number
@@ -174,13 +175,11 @@ Our .asd file now looks like:
                :djula        ;; HTML templates
 
                ;; utils
-               :str          ;; strings library
                :find-port    ;;                 <------- added
                )
   :components ((:module "src"  ;; a src/ subdirectory
                 :components
                 (
-                 (:file "packages")  ;; = src/packages.lisp
                  (:file "myproject") ;; = src/myproject.lisp
                 )))
 
@@ -313,8 +312,9 @@ But wait, do we *really* want to develop our app from this limited
 terminal REPL? No! If you don't already, it's time you understand the
 usefulness of the `load` function.
 
-What we want is to edit our .lisp source file, instead of the REPL,
-and then to reload the app. The reloading is done with
+What we want is to edit our .lisp source file, instead of copy-pasting
+stuff in the REPL, and then to reload the app. The reloading is done
+with
 
     * (load "src/myproject.lisp")
 
@@ -356,7 +356,7 @@ compression, they get to ±20MB. As your application grows, they'll
 stay roughly this size. An app of mine, with dozens of dependencies
 and all the application code, templates and static assets (JS and CSS)
 is 35MB. LispWorks binaries, reduced in size with their tree shaker,
-are know to be smaller, a hello world being ±5MB, a web app around
+are known to be smaller, a hello world being ±5MB, a web app around
 10MB. This tree shaker isn't in the free version.
 
 Enough talk, let's do it. Create a new `build.lisp` file. We need these steps:
@@ -528,7 +528,7 @@ app. Congrats!
 
 ## Closing words
 
-We are only scratching the surface of what we can do with a real app:
+We are only scratching the surface of what we'll want to do with a real app:
 
 - parse CLI args
 - handle a `C-c` and other signals

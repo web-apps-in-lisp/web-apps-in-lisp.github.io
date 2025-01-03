@@ -1,3 +1,5 @@
+(defpackage myproject
+  (:use :cl))
 
 (in-package :myproject)
 
@@ -68,9 +70,7 @@
 
 (defun products (&optional (n 5))
   (loop for i from 0 below n
-        collect (list i
-                      (format nil "Product nb ~r" i)
-                      9.99)))
+        collect (get-product i)))
 
 (defun get-product (n)
   (list n (format nil "Product nb ~a" n) 9.99))
@@ -102,7 +102,7 @@
   (format t "~&Starting the web server on port ~a~&" port)
   (force-output)
   (setf *server* (make-instance 'easy-routes:easy-routes-acceptor
-                                :port (or port *port*)))
+                                :port port))
   (hunchentoot:start *server*))
 
 ;;; Top-level.

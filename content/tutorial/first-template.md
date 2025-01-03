@@ -1,5 +1,5 @@
 +++
-title = "Part 1: the first template"
+title = "the first template"
 weight = -1
 +++
 
@@ -88,7 +88,7 @@ simply use `:key` arguments, like this:
 (djula:render-template*
    (djula:compile-string *template-root*)
    nil
-   :products (products))
+   :products (products))   ;; <----- added
 ```
 
 you can compile the route again and refresh the page at [localhost:8899/](localhost:8899/).
@@ -114,16 +114,16 @@ We have a very cool route:
   (djula:render-template*
    (djula:compile-string *template-root*)
    nil
-   :products (products)))  ;; <----- added
+   :products (products)))
 ```
 
 To test it and see its output, we had to re-compile it (OK), and
-refresh our browser. ARGH! We can do better. It may not look necessary
+refresh our browser. ARGH! We can do better. It may not look obvious
 now, but we are already writing business logic inside a web route. We
 should extract as much logic as possible from the route. It will make
-everything so much easier to test in the long run.
+everything so much easier to write and test in the long run.
 
-My point here is that we have one business rule: rendering
+My point here is that we have one application function: rendering
 products. We can have a function for this:
 
 ```lisp
@@ -137,7 +137,7 @@ products. We can have a function for this:
   (render-products))
 ```
 
-The great benefit is that you can run `(render-products)` by itself (and
+The benefit is that you can run `(render-products)` by itself (and
 very quickly with `C-c C-y` `M-x slime-call-defun`) to test it in the
 REPL, and see the HTML output.
 

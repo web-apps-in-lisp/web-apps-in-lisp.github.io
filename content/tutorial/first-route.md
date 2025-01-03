@@ -1,5 +1,5 @@
 +++
-title = "Part 1: the first route"
+title = "the first route"
 weight = -1
 +++
 
@@ -32,7 +32,7 @@ It's time to start our web server:
 
 ```lisp
 (defun start-server (&key (port *port*))
-  (format t "~&Starting the web server on port ~a" port)
+  (format t "~&Starting the web server on port ~a~&" port)
   (force-output)
   (setf *server* (make-instance 'easy-routes:easy-routes-acceptor
                                 :port port))
@@ -50,7 +50,7 @@ the running Lisp image.
 Now call the function `(myproject::start-server)` or simply
 `(start-server)` if you did the `(in-package :myproject`) in the REPL.
 
-Yourather instantly) should see:
+You should see:
 
 ```
 CL-USER> (myproject::start-server )
@@ -74,5 +74,12 @@ So what if we added a bit more of HTML?
 By the way, did you notice that while developping, you didn't have to stop the
 app, to stop the web server, nor to reload anything? Any changes
 compiled in the running image are immediately available.
+
+Did you wait for something? You didn't, and I promise that as the
+applications grows, with this interactive development style, you will
+never have to wait for stuff re-compiling or re-loading. You'll
+compile your code with a shortcut and have instant feedback. SBCL
+warns us on bad syntax, undefined variables and other typos, some type
+mismatches, unreachable code (meaning we might have an issue), etc.
 
 To stop the app, use `(hunchentoot:stop *server*)`. You can put this in a "stop-app" function.

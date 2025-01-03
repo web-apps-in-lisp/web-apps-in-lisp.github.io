@@ -1,5 +1,5 @@
 +++
-title = "Part 1: the first form"
+title = "the first form"
 weight = 200
 +++
 
@@ -41,8 +41,8 @@ As a consequence, your route should have a parameter named `query`.
 {{% notice info %}}
 
 It's best to declare your parameters, but rest assured that
-Hunchentoot allows you to get the value of any URL parameter with the
-function `hunchentoot:parameter`.
+Hunchentoot allows you to get the value of any URL parameter of the
+current web request with the function `hunchentoot:parameter`.
 
 {{% /notice %}}
 
@@ -102,14 +102,12 @@ Our products are named "product nb …" and we will search for the
 We can make things a lil' bit more interesting with this small change:
 
 ```lisp
-(defun products (&optional (n 5))
-  (loop for i from 0 below n
-        collect (list i
-                      (format nil "Product nb ~r" i)
-                      9.99)))
+
+(defun get-product (n)
+  (list n (format nil "Product nb ~r" n) 9.99))
 ```
 
-Did you notice? `format … "~r"`, for the Radix directive. It prints numbers in english.
+Did you notice? `format … "~r"` instead of `"~a"`, for the Radix directive. It prints numbers in english.
 
 ```lisp
 MYPROJECT> (products)
@@ -189,7 +187,9 @@ I did this for the template:
 ")
 ```
 
-And this for the route:
+I used a `results` variable, which is a list of product objects.
+
+I did this for the route:
 
 ```lisp
 (easy-routes:defroute root ("/") (query)
@@ -272,14 +272,12 @@ Our app now look like this:
    args))
 
 ;;; Models.
+(defun get-product (n)
+  (list n (format nil "Product nb ~r" n) 9.99))
+
 (defun products (&optional (n 5))
   (loop for i from 0 below n
-        collect (list i
-                      (format nil "Product nb ~r" i)
-                      9.99)))
-
-(defun get-product (n)
-  (list n (format nil "Product nb ~a" n) 9.99))
+        collect (get-product i)))
 
 (defun search-products (products query)
   (loop for product in products
