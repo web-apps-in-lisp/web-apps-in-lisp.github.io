@@ -216,6 +216,7 @@ Can you feel that the power of the web is at your fingertips?
 Before we dive into many more topics, I'd like to ensure we know how
 to run our app, from outside of the comfort of our editor.
 
+
 ## Full code
 
 Our app now look like this:
@@ -223,11 +224,14 @@ Our app now look like this:
 ```lisp
 (in-package :myproject)
 
+;;; Parameters.
+(defparameter *port* 8899 "The application port.")
+
+;;; Internal variables.
 (defvar *server* nil
   "Server instance (Hunchentoot acceptor).")
 
-(defparameter *port* 8899 "The application port.")
-
+;;; Templates.
 (defparameter *template-root* "
 <form action=\"/\" method=\"GET\">
   <div>
@@ -260,6 +264,14 @@ Our app now look like this:
 </body>
 ")
 
+(defun render (template &rest args)
+  (apply
+   #'djula:render-template*
+   (djula:compile-string template)
+   nil
+   args))
+
+;;; Models.
 (defun products (&optional (n 5))
   (loop for i from 0 below n
         collect (list i
@@ -274,13 +286,7 @@ Our app now look like this:
         if (search query (second product) :test #'equalp)
           collect product))
 
-(defun render (template &rest args)
-  (apply
-   #'djula:render-template*
-   (djula:compile-string template)
-   nil
-   args))
-
+;;; Routes.
 (easy-routes:defroute root ("/") (query)
   (render *template-root*
           :results (search-products (products) query)
@@ -293,9 +299,11 @@ Our app now look like this:
 
 
 (defun start-server (&key (port *port*))
-  (format t "~&Starting the web server on port ~a" port)
+  (format t "~&Starting the web server on port ~a~&" port)
   (force-output)
   (setf *server* (make-instance 'easy-routes:easy-routes-acceptor
                                 :port (or port *port*)))
   (hunchentoot:start *server*))
 ```
+
+Do you also clearly see 3 different components in this app? Templates, models, routes.

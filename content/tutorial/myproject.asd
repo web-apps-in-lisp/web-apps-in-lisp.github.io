@@ -6,13 +6,10 @@
                :hunchentoot  ;; web server
                :easy-routes  ;; routes facility
                :djula        ;; HTML templates
-               :local-time
 
                ;; utils
                :str          ;; strings library
-               :cl-ppcre     ;; regex
-               :cl-slug      ;; slugs
-               :log4cl       ;; logging
+               :find-port
                )
   :components ((:module "src"  ;; a src/ subdirectory
                 :components

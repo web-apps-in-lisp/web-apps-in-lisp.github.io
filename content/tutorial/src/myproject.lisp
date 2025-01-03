@@ -8,6 +8,11 @@
 
 (defparameter *template-root* "
 <title> Lisp web app </title>
+<head>
+  <link
+  rel=\"stylesheet\"
+  href=\"https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css\">
+</head>
 <body>
   <ul>
   {% for product in products %}
@@ -21,7 +26,14 @@
 
 (defparameter *template-root* "
 
-<form action=\"/\" method=\"GET\">
+<html>
+<head>
+  <link
+  rel=\"stylesheet\"
+  href=\"https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css\">
+</head>
+<body class=\"container\">
+ <form action=\"/\" method=\"GET\">
   <div>
     <label for=\"query\">What do you search for?</label>
     <input name=\"query\" id=\"query\" placeholder=\"Search…\" />
@@ -42,11 +54,13 @@
   {% endfor %}
 </ul>
 {% endif %}
+</body>
+</html>
 ")
 
 (defparameter *template-product* "
 <body>
-     {{ product }}
+     name: {{ product.1 }} price: {{ product.2 }}
 
 {% if debug %} debug info! {% endif %}
 </body>
@@ -85,8 +99,13 @@
 
 
 (defun start-server (&key (port *port*))
-  (format t "~&Starting the web server on port ~a" port)
+  (format t "~&Starting the web server on port ~a~&" port)
   (force-output)
   (setf *server* (make-instance 'easy-routes:easy-routes-acceptor
                                 :port (or port *port*)))
   (hunchentoot:start *server*))
+
+;;; Top-level.
+(defun main ()
+  (start-server :port (find-port:find-port :min *port*))
+  (sleep most-positive-fixnum))

@@ -17,7 +17,7 @@ We'll use Djula HTML templates.
 Usually, templates go into their `templates/` directory. But, we will
 start out by defining our first template inside our .lisp file:
 
-```lisp
+```html
 ;; scr/myproject.lisp
 (defparameter *template-root* "
 <title> Lisp web app </title>
@@ -58,7 +58,7 @@ As a reminder: our products can be retrieved with `(products)`.
 
 How well do you know HTML? Nothing's fancy here. It's actually boring technology.
 
-```lisp
+```html
 (defparameter *template-root* "
 <title> Lisp web app </title>
 <body>
@@ -212,7 +212,7 @@ This is our `myproject.lisp` file so far:
   (render-products))
 
 (defun start-server (&key (port *port*))
-  (format t "~&Starting the web server on port ~a" port)
+  (format t "~&Starting the web server on port ~a~&" port)
   (force-output)
   (setf *server* (make-instance 'easy-routes:easy-routes-acceptor
                                 :port (or port *port*)))

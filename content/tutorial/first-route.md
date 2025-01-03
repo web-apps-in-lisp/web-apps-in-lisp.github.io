@@ -35,7 +35,7 @@ It's time to start our web server:
   (format t "~&Starting the web server on port ~a" port)
   (force-output)
   (setf *server* (make-instance 'easy-routes:easy-routes-acceptor
-                                :port (or port *port*)))
+                                :port port))
   (hunchentoot:start *server*))
 ```
 
@@ -50,7 +50,7 @@ the running Lisp image.
 Now call the function `(myproject::start-server)` or simply
 `(start-server)` if you did the `(in-package :myproject`) in the REPL.
 
-You should see:
+Yourather instantly) should see:
 
 ```
 CL-USER> (myproject::start-server )

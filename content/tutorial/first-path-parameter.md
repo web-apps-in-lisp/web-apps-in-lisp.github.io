@@ -13,7 +13,7 @@ Each product detail will be available on the URL `/product/n` where `n` is the p
 
 To begin with, let's add links to the list of products:
 
-```lisp
+```html
 (defparameter *template-root* "
 <title> Lisp web app </title>
 <body>
@@ -38,11 +38,13 @@ files.
 
 You can also use a [triple quotes reader](https://github.com/smithzvk/pythonic-string-reader):
 
-```lisp
+```
 ;; after (ql:quickload "pythonic-string-reader")
 (pythonic-string-reader:enable-pythonic-string-syntax)
 
-(defparameter *template-root* """<a href="/yes"></a>""")
+(defparameter *template-root* """
+  <a href="/product/"></a>
+  """)
 ```
 
 {{% /notice %}}
@@ -100,13 +102,13 @@ So what do we need to show a product page?
 
 - a route for the product URL (OK)
 - the product ID (OK)
+- get a product object from its ID (you would typically query the database here)
 - a template for the product
-- get a product object from its ID (you would typically query the database here, but we won't)
 - rendering the template with a given product.
 
 Look, we are not doing any error handling and I'm not going to invent
-requirements for this app. Let's get to the simplest functions! Real
-use cases will come in time.
+useless requirements for this app. Let's build the simplest functions!
+Real use cases will come in time.
 
 Can you come up with a template and the route?
 
@@ -135,6 +137,8 @@ Here are mine:
 
 yeah I'm just printing the product, as a list, very simply.
 
+I added a `get-product (n)` function helper.
+
 However I don't like the copy-pasting between `render-product` and `render-products` so I'll fix it. Can you too?
 
 ## Small refactor
@@ -142,9 +146,6 @@ However I don't like the copy-pasting between `render-product` and `render-produ
 I came up with one single `render` function that takes a template as
 parameter, and as many key arguments as needed, that it passes to
 `djula:render-template*`.
-
-I also added a `get-product (n)` function helper. This is the function
-that is supposed to hit the database.
 
 
 ```lisp
