@@ -3,12 +3,11 @@ title = "Routing"
 weight = 15
 +++
 
+I prefer the easy-routes library than pure Hunchentoot to define
+routes, as we did in the tutorial, so skip to its section below if you
+want. However, it can only be benificial to know the built-in
+Hunchentoot ways.
 
-{{% notice info %}}
-
-I prefer the easy-routes library than pure Hunchentoot to define routes, skip to its section if you want.
-
-{{% /notice %}}
 
 ## Hunchentoot
 
@@ -171,7 +170,7 @@ You probably have nothing to do to get the value of those parameters: if you def
 
 However, here's how to interact more with URL parameters. In particular, we can define the default type of a parameter: they are strings by default, but we can ask to receive an integer.
 
-### Hunchentoot
+### Hunchentoot URL parameters
 
 First of all, note that we can access query parameters anytime with
 
@@ -192,7 +191,7 @@ We defined the following handler:
 ~~~lisp
 (hunchentoot:define-easy-handler (say-yo :uri "/yo") (name)
   (setf (hunchentoot:content-type*) "text/plain")
-  (format nil "Hey~@[ ~A~]!" name))
+  (format nil "Hey ~a!" name))
 ~~~
 
 The variable `name` is a string by default. Let's check it out:
@@ -200,7 +199,7 @@ The variable `name` is a string by default. Let's check it out:
 ~~~lisp
 (hunchentoot:define-easy-handler (say-yo :uri "/yo") (name)
   (setf (hunchentoot:content-type*) "text/plain")
-  (format nil "Hey~@[ ~A~] you are of type ~a" name (type-of name)))
+  (format nil "Hey ~a you are of type ~a" name (type-of name)))
 ~~~
 
 Going to [http://localhost:4242/yo?name=Alice](http://localhost:4242/yo?name=Alice) returns

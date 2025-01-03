@@ -1,7 +1,7 @@
 
 +++
 title = "Connecting to a database"
-weight = 170
+weight = 120
 +++
 
 Please see the [databases section](databases.html). The Mito ORM

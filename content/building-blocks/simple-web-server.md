@@ -8,7 +8,7 @@ Before dwelving into web development, we might want to do something simple: serv
 
 ### Serve local files
 
-Create and start a webserver like this:
+If you followed the tutorial you know that we can create and start a webserver like this:
 
 ~~~lisp
 (defvar *acceptor* (make-instance 'hunchentoot:easy-acceptor :port 4242))

@@ -1,6 +1,6 @@
 +++
 title = "Error handling"
-weight = 150
+weight = 100
 +++
 
 In all frameworks, we can choose the level of interactivity. The web

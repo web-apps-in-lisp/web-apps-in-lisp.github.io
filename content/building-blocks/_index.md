@@ -4,11 +4,11 @@ title = "Building blocks"
 weight = 1
 +++
 
-In this chapter we'll start by creating our first route, we'll serve
+In this chapter we'll create routes, we'll serve
 local files and we'll run more than one web app in the same running
 image.
 
-Let's install the libraries we'll use:
+We'll use those libraries:
 
 ~~~lisp
 (ql:quickload '("hunchentoot" "easy-routes" "djula" "spinneret"))

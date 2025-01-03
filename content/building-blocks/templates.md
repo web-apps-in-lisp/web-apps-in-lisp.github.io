@@ -7,7 +7,7 @@ weight = 30
 ### Djula - HTML markup
 
 [Djula](https://github.com/mmontone/djula) is a port of Python's
-Django template engine to Common Lisp. It has [excellent documentation](https://mmontone.github.io/djula/doc/build/html/index.html).
+Django template engine to Common Lisp. It has [excellent documentation](https://mmontone.github.io/djula/djula/).
 
 Install it if you didn't already do it:
 
@@ -61,13 +61,13 @@ the most downloaded libraries of Quicklisp.
 #### Djula filters
 
 Filters allow to modify how a variable is displayed. Djula comes with
-a good set of built-in filters and they are [well documented](https://mmontone.github.io/djula/doc/build/html/filters.html). They are not to be confused with [tags](https://mmontone.github.io/djula/doc/build/html/tags.html).
+a good set of built-in filters and they are [well documented](https://mmontone.github.io/djula/djula/Filters.html#Filters). They are not to be confused with [tags](https://mmontone.github.io/djula/djula/Tags.html#Tags).
 
-They look like this: `{{ name | lower }}`, where `lower` is an
+They look like this: `{{ var | lower }}`, where `lower` is an
 existing filter, which renders the text into lowercase.
 
-Filters sometimes take arguments. For example: `{{ value | add:2 }}` calls
-the `add` filter with arguments `value` and 2.
+Filters sometimes take arguments. For example: `{{ var | add:2 }}` calls
+the `add` filter with arguments `var` and 2.
 
 Moreover, it is very easy to define custom filters. All we have to do
 is to use the `def-filter` macro, which takes the variable as first
@@ -76,11 +76,11 @@ argument, and which can take more optional arguments.
 Its general form is:
 
 ~~~lisp
-(def-filter :myfilter-name (value arg) ;; arg is optional
+(def-filter :myfilter-name (var arg) ;; arg is optional
    (body))
 ~~~
 
-and it is used like this: `{{ value | myfilter-name }}`.
+and it is used like this: `{{ var | myfilter-name }}`.
 
 Here's how the `add` filter is defined:
 
@@ -112,9 +112,10 @@ HTML5 generator. It looks like this:
   (:footer ("Last login: ~A" *last-login*)))
 ~~~
 
-The author finds it is easier to compose the HTML in separate
-functions and macros than with the more famous cl-who. But it
-has more features under it sleeves:
+I find it is easier to compose the HTML than with the more famous
+cl-who, but I personnally prefer to use HTML templates.
+
+Spinneret has nice features under it sleeves:
 
 - it warns on invalid tags and attributes
 - it can automatically number headers, given their depth
