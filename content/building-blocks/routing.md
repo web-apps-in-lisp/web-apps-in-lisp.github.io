@@ -1,6 +1,6 @@
 +++
 title = "Routing"
-weight = 15
+weight = 16
 +++
 
 I prefer the easy-routes library than pure Hunchentoot to define

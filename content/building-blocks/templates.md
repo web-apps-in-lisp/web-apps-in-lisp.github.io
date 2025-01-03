@@ -9,58 +9,83 @@ weight = 30
 [Djula](https://github.com/mmontone/djula) is a port of Python's
 Django template engine to Common Lisp. It has [excellent documentation](https://mmontone.github.io/djula/djula/).
 
-Install it if you didn't already do it:
+Install it if you didn't already:
 
 ~~~lisp
 (ql:quickload "djula")
 ~~~
 
-
-Caveman uses it by default, but otherwise it is not difficult to
+The Caveman framework uses it by default, but otherwise it is not difficult to
 setup. We must declare where our templates live with something like:
 
 ~~~lisp
-(djula:add-template-directory (asdf:system-relative-pathname "webapp" "templates/"))
+(djula:add-template-directory (asdf:system-relative-pathname "myproject" "templates/"))
 ~~~
 
 and then we can declare and compile the ones we use, for example::
 
 ~~~lisp
 (defparameter +base.html+ (djula:compile-template* "base.html"))
-(defparameter +welcome.html+ (djula:compile-template* "welcome.html"))
+(defparameter +products.html+ (djula:compile-template* "products.html"))
 ~~~
 
 A Djula template looks like this:
 
 ```html
 {% extends "base.html" %}
-{% block title %}Memberlist{% endblock %}
+{% block title %} Products page {% endblock %}
 {% block content %}
   <ul>
-  {% for user in users %}
-    <li><a href="{{ user.url }}">{{ user.username }}</a></li>
+  {% for product in products %}
+    <li><a href="{{ product.id }}">{{ product.name }}</a></li>
   {% endfor %}
   </ul>
 {% endblock %}
 ```
 
+This template actually inherits a first one, `base.html`, which can be:
+
+```html
+<html>
+ <head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+
+  <title>{% block title %} My Lisp app {% endblock %}</title>
+
+ </head>
+ <body>
+  <div class="container">
+   {% block content %}  {% endblock %}
+  </div>
+ </body>
+</html>
+```
+
+This base template defines two blocks: one for the page title, one for
+the page content. A template that wants to inherit this base template
+will use `{% extends "base.html" %}` and replace each blocks with `{% block
+content %} … {‰ endblock %}`.
+
+
 At last, to render the template, call `djula:render-template*` inside a route.
 
 ~~~lisp
 (easy-routes:defroute root ("/" :method :get) ()
-  (djula:render-template* +welcome.html+ nil
-                          :users (get-users)
+  (djula:render-template* +products.html+
+                          nil
+                          :products (products)
 ~~~
 
-Note that for efficiency Djula compiles the templates before rendering them.
-
-It is, along with its companion
+Djula is, along with its companion
 [access](https://github.com/AccelerationNet/access/) library, one of
 the most downloaded libraries of Quicklisp.
 
 #### Djula filters
 
-Filters allow to modify how a variable is displayed. Djula comes with
+Filters are only waiting for the developers to define their own, so we should have a work about them.
+
+They allow to modify how a variable is displayed. Djula comes with
 a good set of built-in filters and they are [well documented](https://mmontone.github.io/djula/djula/Filters.html#Filters). They are not to be confused with [tags](https://mmontone.github.io/djula/djula/Tags.html#Tags).
 
 They look like this: `{{ var | lower }}`, where `lower` is an
@@ -112,8 +137,8 @@ HTML5 generator. It looks like this:
   (:footer ("Last login: ~A" *last-login*)))
 ~~~
 
-I find it is easier to compose the HTML than with the more famous
-cl-who, but I personnally prefer to use HTML templates.
+I find Spinneret easier to use than the more famous cl-who, but I
+personnally prefer to use HTML templates.
 
 Spinneret has nice features under it sleeves:
 

@@ -85,9 +85,14 @@ internet right away.
 
 If you evaluate this on your VPS:
 
-    (hunchentoot:start (make-instance 'hunchentoot:easy-acceptor :port 4242))
+```lisp
+(hunchentoot:start (make-instance 'hunchentoot:easy-acceptor :port 4242))
+```
 
 You can see it right away on your server's IP.
+
+You can use the `:address` parameter of Hunchentoot's easy-acceptor to
+bind it and restrict it to 127.0.0.1 (or any address) if you wish.
 
 Stop it with `(hunchentoot:stop *)`.
 
