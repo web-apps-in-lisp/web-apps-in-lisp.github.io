@@ -4,7 +4,7 @@ weight = -1
 +++
 
 
-Are you ready to build a web app in Common Lisp? Welcome.
+Are you ready to build a web app in Common Lisp?
 
 In this first tutorial we will build a simple app that shows a web
 form that will search and display a list of products.
@@ -28,7 +28,7 @@ with an .asd definition and a package, etc.
 
 We expect that you have Quicklisp installed. If not, please see the [Cookbook: getting started](https://lispcookbook.github.io/cl-cookbook/getting-started.html).
 
-Now let's go.
+Now [let's get started](/tutorial/getting-started/).
 
 But beware. There is no going back.
 
