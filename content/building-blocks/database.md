@@ -254,13 +254,12 @@ To set them, look at your DB driver how to run a raw SQL query.
 With `cl-dbi`, this would be `dbi:do-sql`:
 
 ```lisp
-(dbi:do-sql *connection*
-            "PRAGMA auto_vacuum;")
+(dbi:do-sql *connection* "PRAGMA cache_size = -20000;")
 ```
 
 Here's a nice list of pragmas useful for web development:
 
-- [https://dev.to/briandouglasie/sensible-sqlite-defaults-5ei7](https://dev.to/briandouglasie/sensible-sqlite-defaults-5ei7)
+- [https://briandouglas.ie/sqlite-defaults/](https://briandouglas.ie/sqlite-defaults/)
 
 
 ## References

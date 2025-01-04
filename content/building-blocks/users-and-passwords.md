@@ -4,13 +4,16 @@ weight = 130
 +++
 
 We don't know of a Common Lisp framework that will create users and
-roles for you and protect your routes. You'll have to write some Lisp.
+roles for you and protect your routes. You'll have to either write
+some Lisp, either use an external tool (such as Keycloak) that will
+provide all the user management.
 
 {{% notice info %}}
 
 Stay tuned! We are on to something.
 
 {{% /notice %}}
+
 
 ## Creating users
 

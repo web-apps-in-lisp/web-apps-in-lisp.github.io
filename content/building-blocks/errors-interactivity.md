@@ -60,6 +60,7 @@ Hunchentoot defines condition classes:
 - `hunchentoot-warning`, the superclass for all warnings
 - `hunchentoot-error`, the superclass for errors
 - `parameter-error`
+- `bad-request`
 
 See the (light) documentation: [https://edicl.github.io/hunchentoot/#conditions](https://edicl.github.io/hunchentoot/#conditions).
 

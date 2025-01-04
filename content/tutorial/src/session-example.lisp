@@ -24,7 +24,7 @@
          (string= password (getf user :password)))))
 
 ;;; Templates.
-;;; XXX: we have to escape the quotes in our string templates.
+;;; XXX: we have to escape the quotes in our string templates. When they are in files we don't.
 (defparameter *template-login* "
   <html lang=en>
    <head>
@@ -113,30 +113,28 @@
      (render *template-login* :name name :error t))))
 
 #++
-(hunchentoot:define-easy-handler (admin :uri "/admin/") ()
+(hunchentoot:define-easy-handler (admin :uri "/dashboard/") (name password)
     (ecase (hunchentoot:request-method*)
       (:get
        (if (loggedin-p)
            (render *template-welcome*)
            (render *template-login*)))
       (:post
-       (let ((name (hunchentoot:post-parameter "user"))
-             (password (hunchentoot:post-parameter "password")))
-         (cond
-           ((valid-user-p name password)
-            (hunchentoot:start-session)
-            (setf (hunchentoot:session-value 'name) name)
-            (render *template-welcome* :name name))
-           (t
-            (render *template-login* :name name :error t)))))
+       (cond
+         ((valid-user-p name password)
+          (hunchentoot:start-session)
+          (setf (hunchentoot:session-value 'name) name)
+          (render *template-welcome* :name name))
+         (t
+          (render *template-login* :name name :error t))))
       ))
 
 (hunchentoot:define-easy-handler (admin2 :uri "/admin") ()
   (hunchentoot:redirect "/admin/"))
 
 (hunchentoot:define-easy-handler (logout :uri "/admin/logout") ()
-  (setf (hunchentoot:session-value 'name) nil)
-  (hunchentoot:redirect "/admin/"))
+  (hunchentoot:delete-session-value 'name)
+  (hunchentoot:redirect (easy-routes:genurl* 'admin-route)))
 
 ;; Server.
 (defun start-server (&key (port *port*))

@@ -30,8 +30,7 @@ So, the recipe to run our project from sources can look like this (you can find 
 
 (in-package :myproject)
 (handler-case
-    ;; The START function starts the web server.
-    (myproject::start :port (ignore-errors (parse-integer (uiop:getenv "PROJECT_PORT"))))
+    (myproject::start-app :port (ignore-errors (parse-integer (uiop:getenv "PROJECT_PORT"))))
   (error (c)
     (format *error-output* "~&An error occured: ~a~&" c)
     (uiop:quit 1)))
