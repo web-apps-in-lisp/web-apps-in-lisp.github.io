@@ -1,5 +1,5 @@
 +++
-title = "Routing"
+title = "Routes and URL parameters"
 weight = 16
 +++
 
@@ -7,6 +7,11 @@ I prefer the easy-routes library than pure Hunchentoot to define
 routes, as we did in the tutorial, so skip to its section below if you
 want. However, it can only be benificial to know the built-in
 Hunchentoot ways.
+
+{{% notice info %}}
+Please see the tutorial where we define routes with **path parameters**
+and where we also access **URL parameters**.
+{{% /notice %}}
 
 
 ## Hunchentoot
@@ -134,34 +139,86 @@ Hunchentoot to convert the argument to this given type. For example,
 defining an `:integer` will give you an integer and not a string (all
 URL parameters are given as a string by default, but more on that on the next section).
 
-**Decorators** are functions that are executed before the route body. They
-should call the `next` parameter function to continue executing the
-decoration chain and the route body finally. Examples:
+### easy-routes' decorators
 
-~~~lisp
-;; Ensure a user is logged in:
-(defun @auth (next)
-  (let ((*user* (hunchentoot:session-value 'user)))
-    (if (not *user*)
-	(hunchentoot:redirect "/login")
-	(funcall next))))
+`easy-routes` provides us with an easy way to call any function before
+the route body. Following the naming of a popular language, they are
+called "decorators".
 
-;; Define content types:
-(defun @html (next)
-  (setf (hunchentoot:content-type*) "text/html")
-  (funcall next))
+In the end route definitions are only functions, right? Decorators are
+only functions too, but they are run before the route body.
 
+Remember the shape of our routes:
+
+```lisp
+(easy-routes:defroute root ("/") ()
+    "hello app")
+```
+
+We add a list of decorators after the `"/"` part, like this:
+
+```lisp
+ (defroute my-protected-route ("/foo" :method :get
+                                      :decorators ((@json))) ()
+	"hello decorated route")
+```
+
+but what is `@json`? It's a function:
+
+```lisp
 (defun @json (next)
   (setf (hunchentoot:content-type*) "application/json")
   (funcall next))
+```
 
+You can ignore the `@` sign, it doesn't mean anything in Common Lisp
+(but as it's part of the function name it can help you reference all
+your route decorators).
+
+Route "decorators" must accept at least one argument: here called `next`, it is the
+function that will be called next (so, at one point, our route body)
+*if we want to*. Look at `(funcall next)`: our decorator correctly
+calls it.
+
+If you declare a list of decorators, calling "next" will get you
+through the chain of decorator functions, and finally to the route
+body (if no "decorator" exited before).
+
+So what it is function doing? Keep it mind that it is called in the
+context of a web request. So we can call `hunchentoot:content-type*`
+(note the `*`, this function is applied on the current web
+request). We are setting this request's content-type to
+`application/json`.
+
+Yes, you can copy-paste the `setf` line directly into your function.
+
+Here's another "decorator":
+
+```lisp
+(defun @auth (next)
+  (let ((user (hunchentoot:session-value 'user)))
+    (if (not user)
+	  (hunchentoot:redirect "/login")
+	  (funcall next))))
+```
+
+Now that's interesting. It's doing this:
+- it gets a value from the current web session. This can be any Lisp object.
+- if a user was registered in the session, we call the `next` method to run other decorators and the route body
+- otherwise, we redirect to the login page.
+
+We use them in the "User log in" section.
+
+Here's another decorator from easy-routes' README:
+
+```lisp
 ;; Ensure our PostgreSQL database is connected:
 (defun @db (next)
   (postmodern:with-connection *db-spec*
     (funcall next)))
-~~~
+```
 
-I mostly use the `@auth` and `@json` decorators, which I'll demo later. See the `easy-routes` readme for more.
+See the `easy-routes` readme for more.
 
 
 ## Accessing GET and POST parameters
@@ -170,7 +227,7 @@ You probably have nothing to do to get the value of those parameters: if you def
 
 However, here's how to interact more with URL parameters. In particular, we can define the default type of a parameter: they are strings by default, but we can ask to receive an integer.
 
-### Hunchentoot URL parameters
+### Hunchentoot and easy-routes URL parameters
 
 First of all, note that we can access query parameters anytime with
 

@@ -28,7 +28,6 @@ both the login page or the "dashboard" for logged-in users.
 
 <!-- - when we don't find a user ID in the session, we render the log-in page -->
 
-Let's start with the model functions.
 
 We use these libraries:
 
@@ -43,6 +42,7 @@ this at the top of your file:
 (in-package :myproject)
 ```
 
+Let's start with the model functions.
 
 ## Get users
 
@@ -62,6 +62,30 @@ later, we focus on the web stack. Here we return a user object, a
          (string= name (getf user :name))
          (string= password (getf user :password)))))
 ~~~
+
+Look, what if we stored our own name and password in a file? No need
+of a DB for a personal or a toy web app.
+
+In `creds.lisp-expr`:
+
+```lisp
+(:name "me" :password "yadadada")
+```
+
+the ".lisp-expr" is just a convention, so that your tools won't see it
+as a lisp source.
+
+Read it back in with `uiop:read-file-form`:
+
+```lisp
+(defparameter *me* (uiop:read-file-form "creds.lisp-expr"))
+
+(getf *me* :name)
+;; => "me"
+```
+
+Cool? my 2c.
+
 
 ## Templates: login, welcome
 
@@ -141,7 +165,7 @@ You can start with this route:
 We are simply querying the session for the user name. If it's present,
 that means we have established it at login.
 
-Now is a great time to use easy-routes' "decorators".
+Now is a great time to use easy-routes' "decorators" (see the [Routing](/building-blocks/routing/) section).
 
 We can shorten the route to this:
 
@@ -294,10 +318,10 @@ This is the equivalent Hunchentoot route:
 Remarks:
 
 - we can't dispatch on the request type, so we use the `ecase` on `request-method*`
-- we can't use "decorators" so if use branching
+- we can't use "decorators" so we use branching
 - it isn't very clear but `name` and `password` are only used in the POST part.
   - we can also use `(hunchentoot:post-parameter "name")` (the parameter as a string)
-- otherwise, it's pretty similar.
+- all this adds nesting in our function but otherwise, it's pretty similar.
 
 ## Full code
 
@@ -416,3 +440,55 @@ Remarks:
 (defun stop-server ()
   (hunchentoot:stop *server*))
 ```
+
+## Caveman
+
+In Caveman, `*session*` is a hash-table that represents the session's
+data. Here are our login and logout functions:
+
+```lisp
+(defun login (user)
+  "Log the user into the session"
+  (setf (gethash :user *session*) user))
+
+(defun logout ()
+  "Log the user out of the session."
+  (setf (gethash :user *session*) nil))
+```
+
+We define a simple predicate:
+
+```lisp
+(defun logged-in-p ()
+  (gethash :user cm:*session*))
+```
+
+We don't know a mechanism as easy-routes' "decorators" but we define a
+`with-logged-in` macro:
+
+```lisp
+(defmacro with-logged-in (&body body)
+  `(if (logged-in-p)
+       (progn ,@body)
+       (render #p"login.html"
+               '(:message "Please log-in to access this page."))))
+```
+
+If the user isn't logged in, there will be nothing stored in the session store,
+and we render the login page. When all is well, we execute the macro's
+body. We use it like this:
+
+```lisp
+(defroute "/account/logout" ()
+  "Show the log-out page, only if the user is logged in."
+  (with-logged-in
+    (logout)
+    (render #p"logout.html")))
+
+(defroute ("/account/review" :method :get) ()
+  (with-logged-in
+    (render #p"review.html"
+            (list :review (get-review (gethash :user *session*))))))
+```
+
+and so on.
