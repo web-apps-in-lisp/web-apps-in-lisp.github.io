@@ -3,7 +3,6 @@ title = "Connecting to a database"
 weight = 120
 +++
 
-<!-- https://www.reddit.com/r/Common_Lisp/comments/1f7bfql/simple_session_management_with_hunchentoot/ -->
 
 Let's study different use cases:
 
