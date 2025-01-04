@@ -83,13 +83,24 @@
 
 ;; Views.
 (defun loggedin-p ()
-  (hunchentoot:session-value 'user))
+  (hunchentoot:session-value 'name))
+
+(defun @auth (next)
+  (log:info "checking session")
+  (if (loggedin-p)
+      (funcall next)
+      (render *template-login*)))
 
 ;; GET
-(easy-routes:defroute admin-route ("/admin/" :method :get) ()
-  (if (loggedin-p)
-      (render *template-welcome*)
-      (render *template-login*)))
+(easy-routes:defroute admin-route ("/admin/" :method :get :decorators ((@auth))) ()
+  (render *template-welcome* :name (hunchentoot:session-value 'name)))
+
+;; using @auth is equivalent to doing a check in the route body:
+#|
+(if (loggedin-p)
+  (render *template-welcome*)
+  (render *template-login*))
+|#
 
 ;; POST
 (easy-routes:defroute admin-route/POST ("/admin/" :method :post) (name password)
