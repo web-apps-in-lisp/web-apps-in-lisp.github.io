@@ -1,140 +1,271 @@
-
 +++
 title = "Connecting to a database"
 weight = 120
 +++
 
-Please see the [databases section](databases.html). The Mito ORM
-supports SQLite3, PostgreSQL, MySQL, it has migrations and db schema
-versioning, etc.
+<!-- https://www.reddit.com/r/Common_Lisp/comments/1f7bfql/simple_session_management_with_hunchentoot/ -->
 
-### Checking a user is logged-in
+Let's study different use cases:
 
-A framework will provide a way to work with sessions. We'll create a
-little macro to wrap our routes to check if the user is logged in.
+- do you have an existing database you want to read data from?
+- do you want to create a new database?
+  - do you prefer CLOS orientation
+  - or to write SQL queries?
 
-In Caveman, `*session*` is a hash table that represents the session's
-data. Here are our login and logout functions:
+We have many libraries to work with databases, let's have a recap first.
+
+<!-- ## Database libraries -->
+
+The [#database section on the awesome-cl list](https://github.com/CodyReichert/awesome-cl#database)
+is a resource listing popular libraries to work with different kind of
+databases. We can group them roughly in those categories:
+
+- wrappers to one database engine (cl-sqlite, postmodern, cl-redis, cl-duckdb…),
+- ORMs (Mito),
+- interfaces to several DB engines (cl-dbi, cl-yesql…),
+- lispy SQL syntax (sxql…)
+- in-memory persistent object databases (bknr.datastore, cl-prevalence,…),
+- graph databases in pure Lisp (AllegroGraph, vivace-graph) or wrappers (neo4cl),
+- object stores (cl-store, cl-naive-store…)
+- and other tools (pgloader, [which was re-written from Python to Common Lisp](https://tapoueh.org/blog/2014/05/why-is-pgloader-so-much-faster/)).
+
+<!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
+**Table of Contents**
+
+- [Connect](#connect)
+- [Run queries](#run-queries)
+- [Insert rows](#insert-rows)
+- [User-level API](#user-level-api)
+- [Close connections](#close-connections)
+- [The Mito ORM](#the-mito-orm)
+- [How to integrate the databases into the web frameworks](#how-to-integrate-the-databases-into-the-web-frameworks)
+- [Bonus: pimp your SQLite](#bonus-pimp-your-sqlite)
+- [References](#references)
+
+<!-- markdown-toc end -->
+
+
+## How to query an existing database
+
+Let's say you have a database called `db.db` and you want to extract
+data from it.
+
+For our example, quickload this library:
+
+```lisp
+(ql:quickload "cl-dbi")
+```
+
+[cl-dbi](https://github.com/fukamachi/cl-dbi/) can connect to major
+database engines: PostGres, SQLite, MySQL.
+
+Once `cl-dbi` is loaded, you can access its functions with the `dbi`
+package prefix.
+
+### Connect
+
+To connect to a database, use `dbi:connect` with paramaters the DB type, and its name:
+
+```lisp
+(defparameter *db-name* "db.db")
+
+(defvar *connection* nil "the DB connection")
+
+(defun connect ()
+  (if (uiop:file-exists-p *db-name*)
+      (setf *connection* (dbi:connect :sqlite3 :database-name (get-db-name)))
+      (format t "The DB file ~a does not exist." *db-name*)))
+```
+
+The available DB drivers are:
+- `:mysql`
+- `:sqlite3`
+- `:postgres`
+
+For the username and password, use the key arguments `:username` and `:password`.
+
+When you connect for the first time, cl-dbi will automatically
+quickload another dependency, depending on the driver. We advise to
+add the relevant one to your list of dependencies in your .asd file
+(or your binary will chok on a machine without Quicklisp, we learned
+this the hard way).
+
+    :dbd-sqlite3
+    :dbd-mysql
+    :dbd-postgres
+
+We can now run queries.
+
+### Run queries
+
+Running a query is done is 3 steps:
+
+- write the SQL query (in a string, with a lispy syntax…)
+- `dbi:prepare` the query on a DB connection
+- `dbi:execute` it
+- and `dbi:fetch-all` results.
+
+
+```lisp
+(defparameter *select-products* "SELECT * FROM products LIMIT 100")
+
+(dbi:fetch-all (dbi:execute (dbi:prepare *connection* *select-products*)))
+```
+
+This returns something like:
+
+```
+((:|id| 1 :|title| "Lisp Cookbook" :|shelf_id| 1 :|tags_id| NIL :|cover_url|
+  "https://lispcookbook.github.io/cl-cookbook/orly-cover.png"
+  :|created_at| "2024-11-07 22:49:23.972522Z" :|updated_at|
+  "2024-12-30 20:55:51.044704Z")
+ (:|id| 2 :|title| "Common Lisp Recipes" :|shelf_id| 1 :|tags_id| NIL
+  :|cover_url| ""
+  :|created_at| "2024-12-09 19:37:30.057172Z" :|updated_at|
+  "2024-12-09 19:37:30.057172Z"))
+```
+
+We got a list of records where each record is a *property list*, a
+list alternating a key (as a keyword) and a value.
+
+Note how the keywords respect the case of our database fields with the `:|id|` notation.
+
+With arguments, use a `?` placeholder in your SQL query and give a
+list of arguments to `dbi:execute`:
 
 ~~~lisp
-(defun login (user)
-  "Log the user into the session"
-  (setf (gethash :user *session*) user))
+(defparameter *select-products* "SELECT * FROM products WHERE flag = ? OR updated_at > ?")
 
-(defun logout ()
-  "Log the user out of the session."
-  (setf (gethash :user *session*) nil))
+(let* ((query (dbi:prepare *connection* *select-products*))
+       (query (dbi:execute query (list 0 "1984-01-01"))))  ;; <--- list of arguments
+  (loop for row = (dbi:fetch query)
+        while row
+        ;; process "row".
+        ))
 ~~~
 
-We define a simple predicate:
+### Insert rows
 
-~~~lisp
-(defun logged-in-p ()
-  (gethash :user cm:*session*))
-~~~
+*(straight from cl-dbi's documentation)*
 
-and we define our `with-logged-in` macro:
+`dbi:do-sql` prepares and executes a single statement. It returns the
+number of rows affected. It's typically used for non-`SELECT`
+statements.
 
-~~~lisp
-(defmacro with-logged-in (&body body)
-  `(if (logged-in-p)
-       (progn ,@body)
-       (render #p"login.html"
-               '(:message "Please log-in to access this page."))))
-~~~
-
-If the user isn't logged in, there will nothing in the session store,
-and we render the login page. When all is well, we execute the macro's
-body. We use it like this:
-
-~~~lisp
-(defroute "/account/logout" ()
-  "Show the log-out page, only if the user is logged in."
-  (with-logged-in
-    (logout)
-    (render #p"logout.html")))
-
-(defroute ("/account/review" :method :get) ()
-  (with-logged-in
-    (render #p"review.html"
-            (list :review (get-review (gethash :user *session*))))))
-~~~
-
-and so on.
+```lisp
+(dbi:do-sql *connection*
+            "INSERT INTO somewhere (flag, updated_at) VALUES (?, NOW())"
+            (list 0))
+```
 
 
-### Encrypting passwords
+### User-level API
 
-#### With cl-pass
+`dbi` offers more functions to fetch results than `fetch-all`.
 
-[cl-pass](https://github.com/eudoxia0/cl-pass) is a password hashing and verification library. It is as simple to use as this:
+You can use `fetch` to get one result at a time or again `do-sql` to run any
+SQL statement.
 
-~~~lisp
-(cl-pass:hash "test")
-;; "PBKDF2$sha256:20000$5cf6ee792cdf05e1ba2b6325c41a5f10$19c7f2ccb3880716bf7cdf999b3ed99e07c7a8140bab37af2afdc28d8806e854"
-(cl-pass:check-password "test" *)
-;; t
-(cl-pass:check-password "nope" **)
-;; nil
-~~~
 
-You might also want to look at
-[hermetic](https://github.com/eudoxia0/hermetic), a simple
-authentication system for Clack-based applications.
+* connect [driver-name &amp; params] =&gt; &lt;dbi-connection&gt;
+* connect-cached [driver-name &amp; params] =&gt; &lt;dbi-connection&gt;
+* disconnect [&lt;dbi-connection&gt;] =&gt; T or NIL
+* prepare [conn sql] =&gt; &lt;dbi-query&gt;
+* prepare-cached [conn sql] =&gt; &lt;dbi-query&gt;
+* execute [query &amp;optional params] =&gt; something
+* fetch [result] =&gt; a row data as plist
+* fetch-all [result] =&gt; a list of all row data
+* do-sql [conn sql &amp;optional params]
+* list-all-drivers [] =&gt; (&lt;dbi-driver&gt; ..)
+* find-driver [driver-name] =&gt; &lt;dbi-driver&gt;
+* with-transaction [conn]
+* begin-transaction [conn]
+* commit [conn]
+* rollback [conn]
+* ping [conn] =&gt; T or NIL
+* row-count [conn] =&gt; a number of rows modified by the last executed INSERT/UPDATE/DELETE
+* with-connection [connection-variable-name &body body]
 
-#### Manually (with Ironclad)
+### Close connections
 
-In this recipe we do the encryption and verification ourselves. We use the de-facto standard
-[Ironclad](https://github.com/froydnj/ironclad) cryptographic toolkit
-and the [Babel](https://github.com/cl-babel/babel) charset
-encoding/decoding library.
+You should take care of closing the DB connection.
 
-The following snippet creates the password hash that should be stored in your
-database. Note that Ironclad expects a byte-vector, not a string.
+`dbi` has a macro for that:
 
-~~~lisp
-(defun password-hash (password)
-  (ironclad:pbkdf2-hash-password-to-combined-string
-   (babel:string-to-octets password)))
-~~~
+```lisp
+(dbi:with-connection (conn :sqlite3 :database-name "/home/fukamachi/test.db")
+  (let* ((query (dbi:prepare conn "SELECT * FROM People"))
+         (query (dbi:execute query)))
+    (loop for row = (dbi:fetch query)
+          while row
+          do (format t "~A~%" row))))
+```
 
-`pbkdf2` is defined in [RFC2898](https://tools.ietf.org/html/rfc2898).
-It uses a pseudorandom function to derive a secure encryption key
-based on the password.
+Inside this macro, `conn` binds to the current connection.
 
-The following function checks if a user is active and verifies the
-entered password. It returns the user-id if active and verified and
-nil in all other cases even if an error occurs. Adapt it to your
-application.
+There is more but enough, please refer to cl-dbi's README.
 
-~~~lisp
-(defun check-user-password (user password)
-  (handler-case
-      (let* ((data (my-get-user-data user))
-             (hash (my-get-user-hash data))
-             (active (my-get-user-active data)))
-        (when (and active (ironclad:pbkdf2-check-password (babel:string-to-octets password)
-                                                          hash))
-          (my-get-user-id data)))
-    (condition () nil)))
-~~~
 
-And the following is an example on how to set the password on the
-database. Note that we use `(password-hash password)` to save the
-password. The rest is specific to the web framework and to the DB
-library.
+## The Mito ORM
 
-~~~lisp
-(defun set-password (user password)
-  (with-connection (db)
-    (execute
-     (make-statement :update :web_user
-                     (set= :hash (password-hash password))
-                     (make-clause :where
-                                  (make-op := (if (integerp user)
-                                                  :id_user
-                                                  :email)
-                                           user))))))
-~~~
+The [Mito ORM](https://github.com/fukamachi/mito/) provides a nice
+object-oriented way to define schemas and query the database.
 
-*Credit: `/u/arvid` on [/r/learnlisp](https://www.reddit.com/r/learnlisp/comments/begcf9/can_someone_give_me_an_eli5_on_hiw_to_encrypt_and/)*.
+It supports SQLite3, PostgreSQL and MySQL, it has automatic
+migrations, db schema versioning, and more features.
+
+For example, this is how one can define a `user` table with two columns:
+
+```lisp
+(mito:deftable user ()
+  ((name :col-type (:varchar 64))
+   (email :col-type (or (:varchar 128) :null))))
+```
+
+Once we create the table, we can create and insert `user` rows with
+methods such as `create-dao`:
+
+```lisp
+(mito:create-dao 'user :name "Eitaro Fukamachi" :email "e.arrows@gmail.com")
+```
+
+Once we edit the table definition (aka the class definition), Mito
+will (by default) automatically migrate it.
+
+There is much more to say, but we refer you to Mito's good
+documentation and to the Cookbook.
+
+## How to integrate the databases into the web frameworks
+
+The web frameworks / web servers we use in this guide do not need
+anything special. Just use a DB driver and fetch results in your
+routes.
+
+Using a DB connection per request with `dbi:with-connection` is a good idea.
+
+## Bonus: pimp your SQLite
+
+SQLite is a great database. It loves backward compatibility. As such,
+its default settings may not be optimal for a web application seeing
+some load. You might want to set some [PRAGMA
+statements](https://www.sqlite.org/pragma.html) (SQLite settings).
+
+To set them, look at your DB driver how to run a raw SQL query.
+
+With `cl-dbi`, this would be `dbi:do-sql`:
+
+```lisp
+(dbi:do-sql *connection*
+            "PRAGMA auto_vacuum;")
+```
+
+Here's a nice list of pragmas useful for web development:
+
+- [https://dev.to/briandouglasie/sensible-sqlite-defaults-5ei7](https://dev.to/briandouglasie/sensible-sqlite-defaults-5ei7)
+
+
+## References
+
+- [CL Cookbook#databases](https://lispcookbook.github.io/cl-cookbook/databases.html)
+- [Mito](https://github.com/fukamachi/mito/)
+- [cl-dbi](https://github.com/fukamachi/cl-dbi/)

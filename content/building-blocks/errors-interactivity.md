@@ -11,7 +11,7 @@ it do when an error happens?
 - not interactive but developper friendly: it can show the lisp error message on the HTML page,
 - as well as the full Lisp backtrace
 - it can let the developper have the interactive debugger: in that
-  case the framework doesn't catch the error, it lets it through, and
+  case the framework doesn't catch the error, it lets it pass through, and
   we the developper deal with it as in a normal Slime session.
 
 We see this by default:
