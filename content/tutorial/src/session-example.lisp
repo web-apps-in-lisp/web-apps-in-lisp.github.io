@@ -1,9 +1,10 @@
 ;; https://paste.sr.ht/%7Emarcuskammer/587dc97736e6ffc3d2b37895f73c36bb7ba9c0e7
 
-(defpackage :login-demo
-  (:use :cl))
+;; (defpackage :login-demo
+  ;; (:use :cl))
 
-(in-package :login-demo)
+;; (in-package :login-demo)
+(in-package :myproject)
 
 ;; User-facing paramaters.
 (defparameter *port* 9001)
@@ -45,9 +46,9 @@
     <form method=post action=\"/admin/\">
      <p>Username:
       {% if name %}
-      <input type=text name=user value=\"{{ name }}\">
+      <input type=text name=name value=\"{{ name }}\">
       {% else %}
-      <input type=text name=user>
+      <input type=text name=name>
       {% endif %}
      <p>Password:
       <input type=password name=password>
@@ -66,7 +67,7 @@
    </head>
    <body>
     <h1>Welcome, {{ name }}!</h1>
-    <p>You are logged in.
+    <div>You are logged in to your admin dashboard.</div>
     <a href=\"/admin/logout\">Log out</a>
    </body>
   </html>
@@ -84,23 +85,40 @@
 (defun loggedin-p ()
   (hunchentoot:session-value 'user))
 
+;; GET
+(easy-routes:defroute admin-route ("/admin/" :method :get) ()
+  (if (loggedin-p)
+      (render *template-welcome*)
+      (render *template-login*)))
+
+;; POST
+(easy-routes:defroute admin-route/POST ("/admin/" :method :post) (name password)
+  (cond
+    ((valid-user-p name password)
+     (hunchentoot:start-session)
+     (setf (hunchentoot:session-value 'name) name)
+     (render *template-welcome* :name name))
+    (t
+     (render *template-login* :name name :error t))))
+
+#++
 (hunchentoot:define-easy-handler (admin :uri "/admin/") ()
-  (ecase (hunchentoot:request-method*)
-    (:get
-     (if (loggedin-p)
-         (render *template-welcome*)
-         (render *template-login*)))
-    (:post
-     (let ((name (hunchentoot:post-parameter "user"))
-           (password (hunchentoot:post-parameter "password")))
-       (cond
-         ((valid-user-p name password)
-          (hunchentoot:start-session)
-          (setf (hunchentoot:session-value 'name) name)
-          (render *template-welcome* :name name))
-         (t
-          (render *template-login* :name name :error t)))))
-    ))
+    (ecase (hunchentoot:request-method*)
+      (:get
+       (if (loggedin-p)
+           (render *template-welcome*)
+           (render *template-login*)))
+      (:post
+       (let ((name (hunchentoot:post-parameter "user"))
+             (password (hunchentoot:post-parameter "password")))
+         (cond
+           ((valid-user-p name password)
+            (hunchentoot:start-session)
+            (setf (hunchentoot:session-value 'name) name)
+            (render *template-welcome* :name name))
+           (t
+            (render *template-login* :name name :error t)))))
+      ))
 
 (hunchentoot:define-easy-handler (admin2 :uri "/admin") ()
   (hunchentoot:redirect "/admin/"))
