@@ -4,7 +4,7 @@ weight = 150
 +++
 
 
-### Running the application from source
+## Running the application from source
 
 {{% notice info %}}
 See the tutorial.
@@ -53,7 +53,7 @@ running instance. See the following section:
 [connecting to a remote lisp image](https://lispcookbook.github.io/cl-cookbook/debugging.html#remote-debugging) on the Cookbook.
 
 
-### Building a self-contained executable
+## Building a self-contained executable
 
 {{% notice info %}}
 See the tutorial.
@@ -93,3 +93,4 @@ stops. That happens because the server thread is started in the background, and 
 ~~~
 
 If you want to learn more, see… [the Cookbook: scripting, command line arguments, executables](https://lispcookbook.github.io/cl-cookbook/scripting.html).
+
