@@ -153,6 +153,3 @@ threads, requests per second,…).
 
 See [cl-sentry-client](https://github.com/mmontone/cl-sentry-client/) for error reporting.
 
-## Connecting to a remote Lisp image (Swank server)
-
-See this Cookbook section: [debugging#remote-debugging](https://lispcookbook.github.io/cl-cookbook/debugging.html#remote-debugging).
