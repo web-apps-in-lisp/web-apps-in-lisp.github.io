@@ -17,14 +17,40 @@ Stay tuned! We are on to something.
 
 ## Creating users
 
-If you use a database, you'll have to create at least to save users. A
-`user` table typically defines:
-- a unique ID (the primary key)
+If you use a database, you'll have to create at least a `users`
+table. It would typically define:
+- a unique ID (integer, primary key)
 - a name (varchar)
 - an email (varchar)
-- a password (encrypted)
+- a password (varchar (and encrypted))
 - optionally, a key to the table listing roles.
 
+You can start with this:
+
+~~~SQL
+CREATE TABLE users (
+  id INTEGER PRIMARY KEY,
+  username VARCHAR(255),
+  email VARCHAR(255),
+  password VARCHAR(255),
+)
+~~~
+
+You can run this right now with SQLite on the command line:
+
+```
+$ sqlite3 db.db "CREATE TABLE users (id INTEGER PRIMARY KEY, username VARCHAR(255), email VARCHAR(255), password VARCHAR(255))"
+```
+
+This creates the database if it doesn't exist. SQLite reads SQL from the command line.
+
+Create users:
+
+```
+$ sqlite3 db.db "INSERT INTO users VALUES(1,'Alice','alice@mail','xxx');"
+```
+
+Did it work? Run `SELECT * FROM users;`.
 
 
 ## Encrypting passwords
@@ -41,10 +67,6 @@ If you use a database, you'll have to create at least to save users. A
 (cl-pass:check-password "nope" **)
 ;; nil
 ```
-
-You might also want to look at
-[hermetic](https://github.com/eudoxia0/hermetic), a simple
-authentication system for Clack-based applications.
 
 ### Manually (with Ironclad)
 
