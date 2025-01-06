@@ -1,5 +1,4 @@
 
-## Web Apps in Lisp: Know-how
 
 You want to write a web application in Common Lisp and you don't know
 where to start? You are a beginner in web development, or a lisp
@@ -24,7 +23,12 @@ products and displays the results.
 
 
 The **building blocks** section is organized by topics, so that with a
-question in mind you should be able to look at the table of contents, pick the right page and go ahead.
+question in mind you should be able to look at the table of contents,
+pick the right page and go ahead. You'll find more tutorials, for
+example in "User log-in" we build a login form.
+
+![](/building-blocks/login.png)
+
 
 We hope that it will be plenty useful to you.
 
@@ -35,6 +39,14 @@ Don't hesitate to share what you're building!
 {{% /notice %}}
 
 Now let's go to [the tutorial](/tutorial/).
+
+## How to start with Common Lisp
+
+This resources is not about learning Common Lisp the language, and we
+expect you have a working setup, with the Quicklisp package
+manager. Please have the
+[Cookbook](https://lispcookbook.github.io/cl-cookbook/) open on the side.
+
 
 ## Contact
 
