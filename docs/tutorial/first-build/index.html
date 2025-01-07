@@ -1,0 +1,232 @@
+<!doctype html><html lang=en-us dir=ltr itemscope itemtype=http://schema.org/Article><head><meta charset=utf-8><meta name=viewport content="height=device-height,width=device-width,initial-scale=1,minimum-scale=1"><meta name=generator content="Hugo 0.136.0"><meta name=generator content="Relearn 7.0.1+72a875f1db967152c77914cff4d53f8fcee0e619"><meta name=description content="We have developped a web app in Common Lisp.
+At the first step, we opened a REPL and since then, without noticing, we have compiled variables and function definitions pieces by pieces, step by step, with keyboard shortcuts giving immediate feedback, testing our progress on the go, running a function in the REPL or refreshing the browser window.
+Info We didn’t have to restart any Lisp process, nor any web server."><meta name=author content="vindarel"><meta name=twitter:card content="summary"><meta name=twitter:title content="the first build :: Web Apps in Lisp: Know-how"><meta name=twitter:description content="We have developped a web app in Common Lisp.
+At the first step, we opened a REPL and since then, without noticing, we have compiled variables and function definitions pieces by pieces, step by step, with keyboard shortcuts giving immediate feedback, testing our progress on the go, running a function in the REPL or refreshing the browser window.
+Info We didn’t have to restart any Lisp process, nor any web server."><meta property="og:url" content="http://example.org/tutorial/first-build/index.html"><meta property="og:site_name" content="Web Apps in Lisp: Know-how"><meta property="og:title" content="the first build :: Web Apps in Lisp: Know-how"><meta property="og:description" content="We have developped a web app in Common Lisp.
+At the first step, we opened a REPL and since then, without noticing, we have compiled variables and function definitions pieces by pieces, step by step, with keyboard shortcuts giving immediate feedback, testing our progress on the go, running a function in the REPL or refreshing the browser window.
+Info We didn’t have to restart any Lisp process, nor any web server."><meta property="og:locale" content="en_us"><meta property="og:type" content="article"><meta property="article:section" content="Tutorial part 1"><meta itemprop=name content="the first build :: Web Apps in Lisp: Know-how"><meta itemprop=description content="We have developped a web app in Common Lisp.
+At the first step, we opened a REPL and since then, without noticing, we have compiled variables and function definitions pieces by pieces, step by step, with keyboard shortcuts giving immediate feedback, testing our progress on the go, running a function in the REPL or refreshing the browser window.
+Info We didn’t have to restart any Lisp process, nor any web server."><meta itemprop=wordCount content="2618"><title>the first build :: Web Apps in Lisp: Know-how</title>
+<link href=/tutorial/first-build/index.xml rel=alternate type=application/rss+xml title="the first build :: Web Apps in Lisp: Know-how"><link href=/css/fontawesome-all.min.css?1736278160 rel=stylesheet media=print onload='this.media="all",this.onload=null'><noscript><link href=/css/fontawesome-all.min.css?1736278160 rel=stylesheet></noscript><link href=/css/nucleus.css?1736278160 rel=stylesheet><link href=/css/auto-complete.css?1736278160 rel=stylesheet media=print onload='this.media="all",this.onload=null'><noscript><link href=/css/auto-complete.css?1736278160 rel=stylesheet></noscript><link href=/css/perfect-scrollbar.min.css?1736278160 rel=stylesheet><link href=/css/fonts.css?1736278160 rel=stylesheet media=print onload='this.media="all",this.onload=null'><noscript><link href=/css/fonts.css?1736278160 rel=stylesheet></noscript><link href=/css/theme.css?1736278160 rel=stylesheet><link href=/css/theme-auto.css?1736278160 rel=stylesheet id=R-variant-style><link href=/css/chroma-auto.css?1736278160 rel=stylesheet id=R-variant-chroma-style><link href=/css/print.css?1736278160 rel=stylesheet media=print><script src=/js/variant.js?1736278160></script><script>window.relearn=window.relearn||{},window.relearn.relBasePath="../..",window.relearn.relBaseUri="../..",window.relearn.absBaseUri="http://example.org",window.relearn.disableAnchorCopy=!1,window.relearn.disableAnchorScrolling=!1,window.variants&&variants.init(["auto"]),window.T_Copy_to_clipboard=`Copy to clipboard`,window.T_Copied_to_clipboard=`Copied to clipboard!`,window.T_Copy_link_to_clipboard=`Copy link to clipboard`,window.T_Link_copied_to_clipboard=`Copied link to clipboard!`,window.T_Reset_view=`Reset view`,window.T_View_reset=`View reset!`,window.T_No_results_found=`No results found for "{0}"`,window.T_N_results_found=`{1} results found for "{0}"`</script></head><body class="mobile-support html" data-url=/tutorial/first-build/index.html><div id=R-body class=default-animation><div id=R-body-overlay></div><nav id=R-topbar><div class=topbar-wrapper><div class=topbar-sidebar-divider></div><div class="topbar-area topbar-area-start" data-area=start><div class="topbar-button topbar-button-sidebar" data-content-empty=disable data-width-s=show data-width-m=hide data-width-l=hide><button class=topbar-control onclick=toggleNav() type=button title="Menu (CTRL+ALT+n)"><i class="fa-fw fas fa-bars"></i></button></div><div class="topbar-button topbar-button-toc" data-content-empty=hide data-width-s=show data-width-m=show data-width-l=show><button class=topbar-control onclick=toggleTopbarFlyout(this) type=button title="Table of Contents (CTRL+ALT+t)"><i class="fa-fw fas fa-list-alt"></i></button><div class=topbar-content><div class=topbar-content-wrapper><nav class=TableOfContents><ul><li><a href=#run-from-sources>Run from sources</a></li><li><a href=#address-in-use-error-and-interactive-debugger>&ldquo;Address in use&rdquo; error and interactive debugger</a></li><li><a href=#find-a-port-number>Find a port number</a></li><li><a href=#interact-with-the-running-web-app>Interact with the running web app</a></li><li><a href=#building-our-first-binary>Building our first binary</a><ul><li><a href=#save-lisp-and-die>save-lisp-and-die</a></li><li><a href=#the-server-exits-right-after-start-up>&ldquo;The server exits right after start up!&rdquo;</a></li></ul></li><li><a href=#core-compression>Core compression</a></li><li><a href=#closing-words>Closing words</a></li></ul></nav></div></div></div></div><ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype=http://schema.org/BreadcrumbList><li itemscope itemtype=https://schema.org/ListItem itemprop=itemListElement><a itemprop=item href=/tutorial/index.html><span itemprop=name>Tutorial part 1</span></a><meta itemprop=position content="1">&nbsp;>&nbsp;</li><li itemscope itemtype=https://schema.org/ListItem itemprop=itemListElement><span itemprop=name>the first build</span><meta itemprop=position content="2"></li></ol><div class="topbar-area topbar-area-end" data-area=end><div class="topbar-button topbar-button-prev" data-content-empty=disable data-width-s=show data-width-m=show data-width-l=show><a class=topbar-control href=/tutorial/first-bonus-css/index.html title="Bonus: pimp your CSS (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a></div><div class="topbar-button topbar-button-next" data-content-empty=disable data-width-s=show data-width-m=show data-width-l=show><a class=topbar-control href=/building-blocks/index.html title="Building blocks (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a></div><div class="topbar-button topbar-button-more" data-content-empty=hide data-width-s=show data-width-m=show data-width-l=show><button class=topbar-control onclick=toggleTopbarFlyout(this) type=button title=More><i class="fa-fw fas fa-ellipsis-v"></i></button><div class=topbar-content><div class=topbar-content-wrapper><div class="topbar-area topbar-area-more" data-area=more></div></div></div></div></div></div></nav><div id=R-main-overlay></div><main id=R-body-inner class="highlightable tutorial" tabindex=-1><div class=flex-block-wrapper><article class=default><header class=headline></header><h1 id=the-first-build>the first build</h1><p>We have developped a web app in Common Lisp.</p><p>At the first step, we opened a REPL and since then, without noticing,
+we have compiled variables and function definitions pieces by pieces,
+step by step, with keyboard shortcuts giving immediate feedback,
+testing our progress on the go, running a function in the REPL or
+refreshing the browser window.</p><div class="box notices cstyle info"><div class=box-label><i class="fa-fw fas fa-info-circle"></i> Info</div><div class=box-content><p>We didn&rsquo;t have to restart any Lisp process, nor any web server.</p><p>Think about it, that&rsquo;s awesome!</p></div></div><p><em>(and yet, we didn&rsquo;t talk about the interactive debugger and about unwinding the stack to resume from errors)</em></p><p>However, it <em>is</em> useful to start our application from scratch once in a while:</p><ul><li>did we list all our dependencies in the .asd project definition?</li><li>does it work from scratch, do we have any issue with fresh data?</li></ul><p>We can run our app from sources, and we can build a self-contained binary.</p><h2 id=run-from-sources>Run from sources</h2><p>Do you remember what we did at the beginning to load our project?</p><ul><li>compile and load the .asd project definition</li><li>quickload our project</li><li>start the web server.</li></ul><p>That&rsquo;s all we need. Let&rsquo;s write these 3 commands in a new file. At the
+project root, create a file <code>run.lisp</code>, in which you copy those steps:</p><div class="highlight wrap-code"><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-lisp data-lang=lisp><span style=display:flex><span><span style=color:#75715e>;; run.lisp</span>
+</span></span><span style=display:flex><span>(<span style=color:#a6e22e>load</span> <span style=color:#e6db74>&#34;myproject.asd&#34;</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>(ql:quickload <span style=color:#e6db74>&#34;myproject&#34;</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>(myproject::start-server)</span></span></code></pre></div><p>Why the double <code>::</code> in <code>myproject::start-server</code>? Because we didn&rsquo;t
+<code>export</code> the <code>start-server</code> function, and because we didn&rsquo;t write
+<code>(in-package :myproject)</code>.</p><p>This works too:</p><div class="highlight wrap-code"><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-lisp data-lang=lisp><span style=display:flex><span>(in-package <span style=color:#e6db74>:myproject</span>)
+</span></span><span style=display:flex><span>(start-server)</span></span></code></pre></div><p>Now run the app from the terminal:</p><pre><code>sbcl --load run.lisp
+</code></pre><p>or use <code>rlwrap sbcl</code> (a &ldquo;readline wrapper&rdquo;) for convenience, to get REPL history and to support the arrow keys. Yeah the default SBCL REPL is barebones.</p><h2 id=address-in-use-error-and-interactive-debugger>&ldquo;Address in use&rdquo; error and interactive debugger</h2><p>You should see this output, but you shouldn&rsquo;t be worried since the error message is explicit:</p><div class="highlight wrap-code"><pre tabindex=0><code>$ rlwrap sbcl --load run.lisp
+This is SBCL 2.1.5, an implementation of ANSI Common Lisp.
+More information about SBCL is available at &lt;http://www.sbcl.org/&gt;.
+
+SBCL is free software, provided as is, with absolutely no warranty.
+It is mostly in the public domain; some portions are provided under
+BSD-style licenses.  See the CREDITS and COPYING files in the
+distribution for more information.
+To load &#34;myproject&#34;:
+  Load 1 ASDF system:
+    myproject
+; Loading &#34;myproject&#34;
+..............
+Starting the web server on port 8899
+While evaluating the form starting at line 5, column 0
+  of #P&#34;/home/vince/projets/web-apps-in-lisp/walk/walk-book/content/tutorial/run.lisp&#34;:
+
+debugger invoked on a USOCKET:ADDRESS-IN-USE-ERROR in thread
+#&lt;THREAD &#34;main thread&#34; RUNNING {10015484D3}&gt;:
+  Condition USOCKET:ADDRESS-IN-USE-ERROR was signalled.
+
+Type HELP for debugger help, or (SB-EXT:EXIT) to exit from SBCL.
+
+restarts (invokable by number or by possibly-abbreviated name):
+  0: [RETRY   ] Retry EVAL of current toplevel form.
+  1: [CONTINUE] Ignore error and continue loading file &#34;/home/vince/projets/web-apps-in-lisp/walk/walk-book/content/tutorial/run.lisp&#34;.
+  2: [ABORT   ] Abort loading file &#34;/home/vince/projets/web-apps-in-lisp/walk/walk-book/content/tutorial/run.lisp&#34;.
+  3:            Ignore runtime option --load &#34;run.lisp&#34;.
+  4:            Skip rest of --eval and --load options.
+  5:            Skip to toplevel READ/EVAL/PRINT loop.
+  6: [EXIT    ] Exit SBCL (calling #&#39;EXIT, killing the process).
+
+(USOCKET:SOCKET-LISTEN #(0 0 0 0) 8899 :REUSEADDRESS T :REUSE-ADDRESS NIL :BACKLOG 50 :ELEMENT-TYPE (UNSIGNED-BYTE 8))
+   source: (ERROR C)
+0]</code></pre></div><p>What you got here is the interactive debugger with &ldquo;restart&rdquo; actions,
+however presented in a kludgy form. What we get in a good Lisp IDE
+is way easier to use ;) To exit, read the available restarts, you
+have two options: type &ldquo;2&rdquo; or &ldquo;6&rdquo; in the prompt and press Enter. You
+now get another prompt:</p><div class="highlight wrap-code"><pre tabindex=0><code> 6
+
+*</code></pre></div><p>This is the top-level Lisp REPL. You can type any Lisp forms in
+there. You can press C-d or type <code>(quit)</code>.</p><p>If you wanted to avoid the debugger, you could use an SBCL switch:
+<code>--non-interactive</code>. But wait a bit before we use it together please.</p><p>Back to our error message.</p><p>The meaningful bit is &ldquo;Condition USOCKET:ADDRESS-IN-USE-ERROR was
+signalled&rdquo;. <code>usocket</code> is the low-level library that does the
+networking for Hunchentoot. &ldquo;Address in use&rdquo; is correct: our app is
+already running from our editor, already using the default port
+number. We have to either stop the app there, either use another port.</p><p>To stop the app, use <code>(hunchentoot:stop *server*)</code> in our editor REPL
+and from within the project package, since <code>*server*</code> is a variable of
+ours.</p><p>To use another port, what would you prefer?</p><ul><li>we can give the port as an argument on the command line, like <code>--port 9000</code>.</li><li>we can find the next available port.</li></ul><p>Let&rsquo;s do the latter.</p><h2 id=find-a-port-number>Find a port number</h2><p>This will be quick as we&rsquo;ll use a library for that, called <code>find-port</code>.</p><p>Please quickload it and add it to the project definition.</p><p>You can either:</p><ul><li>run <code>(ql:quickload "find-port")</code> on the REPL and add &ldquo;find-port&rdquo; in the .asd, in the &ldquo;:depends-on&rdquo; list,</li><li>add &ldquo;find-port&rdquo; in the .asd, re-compile it with <code>C-c C-k</code> or a call to <code>load</code>, and then <code>(ql:quickload "myproject")</code>.</li></ul><div class="box notices cstyle info"><div class=box-label><i class="fa-fw fas fa-info-circle"></i> Info</div><div class=box-content><p>You just loaded a new library without needing to restart the lisp process.</p></div></div><p>Our .asd file now looks like:</p><div class="highlight wrap-code"><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-lisp data-lang=lisp><span style=display:flex><span>(asdf:defsystem <span style=color:#e6db74>&#34;myproject&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>:version</span> <span style=color:#e6db74>&#34;0.1&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>:author</span> <span style=color:#e6db74>&#34;me&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>:license</span> <span style=color:#e6db74>&#34;WTFPL&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>:depends-on</span> (
+</span></span><span style=display:flex><span>               <span style=color:#e6db74>:hunchentoot</span>  <span style=color:#75715e>;; web server</span>
+</span></span><span style=display:flex><span>               <span style=color:#e6db74>:easy-routes</span>  <span style=color:#75715e>;; routes facility</span>
+</span></span><span style=display:flex><span>               <span style=color:#e6db74>:djula</span>        <span style=color:#75715e>;; HTML templates</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>               <span style=color:#75715e>;; utils</span>
+</span></span><span style=display:flex><span>               <span style=color:#e6db74>:find-port</span>    <span style=color:#75715e>;;                 &lt;------- added</span>
+</span></span><span style=display:flex><span>               )
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>:components</span> ((<span style=color:#e6db74>:module</span> <span style=color:#e6db74>&#34;src&#34;</span>  <span style=color:#75715e>;; a src/ subdirectory</span>
+</span></span><span style=display:flex><span>                <span style=color:#e6db74>:components</span>
+</span></span><span style=display:flex><span>                (
+</span></span><span style=display:flex><span>                 (<span style=color:#e6db74>:file</span> <span style=color:#e6db74>&#34;myproject&#34;</span>) <span style=color:#75715e>;; = src/myproject.lisp</span>
+</span></span><span style=display:flex><span>                )))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>:description</span> <span style=color:#e6db74>&#34;A list of products&#34;</span>)</span></span></code></pre></div><p>How does <code>find-port</code> work? On the REPL, write <code>(find-port:find-port</code>
+and look at your editor&rsquo;s minibuffer, or tooltip, as it should show
+you the function signature. <code>find-port</code> takes key arguments,
+<code>:min</code> and <code>:max</code>.</p><p>Let&rsquo;s try:</p><div class="highlight wrap-code"><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-lisp data-lang=lisp><span style=display:flex><span>MYPROJECT&gt; (find-port:find-port <span style=color:#e6db74>:min</span> <span style=color:#ae81ff>8899</span>)
+</span></span><span style=display:flex><span>8900</span></span></code></pre></div><p>That&rsquo;s all we need to use.</p><p>Where should we call it, in the run.lisp file or in myproject.lisp?</p><p>We&rsquo;ll create a new function in myproject.lisp. We don&rsquo;t alter the
+<code>start-server</code> function which does a good job, we&rsquo;ll create a new
+function that is responsible of dealing with the outside world.</p><p>Let&rsquo;s call this function <code>main</code>:</p><div class="highlight wrap-code"><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-lisp data-lang=lisp><span style=display:flex><span><span style=color:#75715e>;; myproject.lisp</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;; Top-level.</span>
+</span></span><span style=display:flex><span>(defun main ()
+</span></span><span style=display:flex><span>  (start-server <span style=color:#e6db74>:port</span> (find-port:find-port <span style=color:#e6db74>:min</span> *port*)))</span></span></code></pre></div><p>And now we use it in the run.lisp file:</p><div class="highlight wrap-code"><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-lisp data-lang=lisp><span style=display:flex><span>(<span style=color:#a6e22e>load</span> <span style=color:#e6db74>&#34;myproject.asd&#34;</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>(ql:quickload <span style=color:#e6db74>&#34;myproject&#34;</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>(in-package <span style=color:#e6db74>:myproject</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>(main)</span></span></code></pre></div><p>Run it again:</p><pre><code>sbcl --load run.lisp
+</code></pre><div class="highlight wrap-code"><pre tabindex=0><code>This is SBCL 2.1.5, an implementation of ANSI Common Lisp.
+More information about SBCL is available at &lt;http://www.sbcl.org/&gt;.
+
+SBCL is free software, provided as is, with absolutely no warranty.
+It is mostly in the public domain; some portions are provided under
+BSD-style licenses.  See the CREDITS and COPYING files in the
+distribution for more information.
+To load &#34;myproject&#34;:
+  Load 1 ASDF system:
+    myproject
+; Loading &#34;myproject&#34;
+..................................................
+[package myproject].
+Starting the web server on port 8900
+*</code></pre></div><p>Now the meaningful message is &ldquo;Starting the web server on port 8900&rdquo;.</p><p>You notice this last <code>* </code>thing? Once again, it&rsquo;s the top-level Lisp
+prompt. You can type any Lisp form. You can interact with the running
+web app.</p><p>Visit <a href="http://localhost:8900/?query=one" rel=external target=_blank>http://localhost:8900/?query=one</a>, it works!</p><p>You can see HTTP logs in the console:</p><div class="highlight wrap-code"><pre tabindex=0><code>127.0.0.1 - [2025-01-03 13:38:17] &#34;GET /?query=one HTTP/1.1&#34; 200 503 &#34;-&#34; &#34;Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0&#34;
+127.0.0.1 - [2025-01-03 13:38:18] &#34;GET /favicon.ico HTTP/1.1&#34; 404 301 &#34;http://localhost:8900/?query=one&#34; &#34;Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0&#34;</code></pre></div><h2 id=interact-with-the-running-web-app>Interact with the running web app</h2><p><code>* </code>is the Lisp prompt. What is the current package?</p><p>Type in</p><pre><code>*package*
+</code></pre><p>it responds &ldquo;#&lt;PACKAGE &ldquo;COMMON-LISP-USER&rdquo;>&rdquo;.</p><p>Are you surprised it isn&rsquo;t our &ldquo;myproject&rdquo; package? I am with you. The
+explanation is that the <code>in-package</code> we wrote in the run.lisp file is
+<em>for this file</em>. When SBCL starts up, it starts its top-level
+evaluator/compiler in the cl-user package. It is asked to load our
+file, which it does, but once it&rsquo;s done it&rsquo;s back at the cl-user
+package.</p><p>To facilitate our interactions with the running app, we can of course
+type right now <code>(in-package :myproject)</code>, and we can also add an
+argument to the command line:</p><pre><code>sbcl --load run.lisp --eval &quot;(in-package :myproject)&quot;
+</code></pre><p>Ask the value of <code>*package*</code> again. OK.</p><p>What can we do more? We can inspect some variables and test some
+functions. Type in <code>(products)</code>, it works. You can check the value of
+<code>*server*</code>. This is actually useful: we are inspecting the internals
+of our running web app, and we didn&rsquo;t need to do anything
+special. Sure, we can add some logging and a monitoring dashboard. But
+as a second step.</p><p>What can we do more? We can also re-define our functions and
+variables, or develop our app. Look, we can create a new route. Copy
+this to the REPL:</p><div class="highlight wrap-code"><pre tabindex=0><code>* (easy-routes:defroute hello-route (&#34;/hello&#34;) () &#34;hello new route&#34;)
+HELLO-ROUTE</code></pre></div><p>and go to <a href=http://localhost:8900/hello rel=external target=_blank>http://localhost:8900/hello</a>:
+you just created a new route while the app was running.</p><p>But wait, do we <em>really</em> want to develop our app from this limited
+terminal REPL? No! If you don&rsquo;t already, it&rsquo;s time you understand the
+usefulness of the <code>load</code> function.</p><p>What we want is to edit our .lisp source file, instead of copy-pasting
+stuff in the REPL, and then to reload the app. The reloading is done
+with</p><pre><code>* (load &quot;src/myproject.lisp&quot;)
+</code></pre><p>Try it!</p><p>You can also use <code>ql:quickload</code>.</p><p>In doing so, you are re-discovering a less interactive way of
+developping.</p><h2 id=building-our-first-binary>Building our first binary</h2><p>Running from sources is OK.</p><p>Building a binary requires a bit more work but it can bring advantages:</p><ul><li>the app will start faster, way faster with a binary (binaries start-up in ±2ms)</li><li>it may be easier to deploy your app to a server<ul><li>because you don&rsquo;t need to install a lisp implementation nor to set up Quicklisp on the server.</li></ul></li><li>it&rsquo;s easier to ship your app to end users</li><li>you can save working versions of your app: binary-v0.1, binary-v0.2 etc.</li></ul><p>Building binaries with SBCL is done with the function
+<code>sb-ext:save-lisp-and-die</code> (it lives in the <code>sb-ext</code> SBCL module, that
+is available by default).</p><p>Other implementations don&rsquo;t define the exact same function, that&rsquo;s why
+we need a compatibility layer, which is provided by ASDF. We show this
+method in the Cookbook and later in this guide.</p><p>SBCL binaries are portable from and to the same operating system:
+build on GNU/Linux, run on GNU/Linux. Or build on a CI system on the 3
+platforms. They are not truly static binaries as they rely on the
+GLibc. There was an ongoing patch to make them truly static, it isn&rsquo;t
+done though.</p><p>An SBCL binary will weight, by default, around 80MB. With
+compression, they get to ±20MB. As your application grows, they&rsquo;ll
+stay roughly this size. An app of mine, with dozens of dependencies
+and all the application code, templates and static assets (JS and CSS)
+is 35MB. LispWorks binaries, reduced in size with their tree shaker,
+are known to be smaller, a hello world being ±5MB, a web app around
+10MB. This tree shaker isn&rsquo;t in the free version.</p><p>Enough talk, let&rsquo;s do it. Create a new <code>build.lisp</code> file. We need these steps:</p><ul><li>load our app</li><li>build a binary<ul><li>where we define an entry point</li></ul></li></ul><h3 id=save-lisp-and-die>save-lisp-and-die</h3><p><code>sb-ext:save-lisp-and-die</code> expects these arguments:</p><ul><li>a binary name, as a string.</li><li>a <code>:toplevel</code> key argument, designing the function to run when the binary starts.</li><li><code>:executable</code> to set to <code>t</code> if we build an executable, and not a <em>core image</em>.</li><li><code>:compression</code> for a compression level (optionnal),</li><li>and more.</li></ul><p>We use it like this:</p><div class="highlight wrap-code"><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-lisp data-lang=lisp><span style=display:flex><span>(sb-ext:save-lisp-and-die <span style=color:#e6db74>&#34;myproject&#34;</span> <span style=color:#e6db74>:executable</span> <span style=color:#66d9ef>t</span> <span style=color:#e6db74>:toplevel</span> <span style=color:#a6e22e>#&#39;</span>myproject::main)</span></span></code></pre></div><p>This is our build.lisp file:</p><div class="highlight wrap-code"><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-lisp data-lang=lisp><span style=display:flex><span>(<span style=color:#a6e22e>load</span> <span style=color:#e6db74>&#34;myproject.asd&#34;</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>(ql:quickload <span style=color:#e6db74>&#34;myproject&#34;</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>(sb-ext:save-lisp-and-die <span style=color:#e6db74>&#34;myproject&#34;</span> <span style=color:#e6db74>:executable</span> <span style=color:#66d9ef>t</span> <span style=color:#e6db74>:toplevel</span> <span style=color:#a6e22e>#&#39;</span>myproject::main)</span></span></code></pre></div><p>Now run it with</p><pre><code>sbcl --load build.lisp
+</code></pre><p>You should see:</p><div class="highlight wrap-code"><pre tabindex=0><code>$ sbcl --load build.lisp
+This is SBCL 2.1.5, an implementation of ANSI Common Lisp.
+More information about SBCL is available at &lt;http://www.sbcl.org/&gt;.
+
+SBCL is free software, provided as is, with absolutely no warranty.
+It is mostly in the public domain; some portions are provided under
+BSD-style licenses.  See the CREDITS and COPYING files in the
+distribution for more information.
+To load &#34;myproject&#34;:
+  Load 1 ASDF system:
+    myproject
+; Loading &#34;myproject&#34;
+............
+[undoing binding stack and other enclosing state... done]
+[performing final GC... done]
+[defragmenting immobile space... (fin,inst,fdefn,code,sym)=2118+1401+24925+24417+26979... done]
+[saving current Lisp image into myproject:
+writing 0 bytes from the read-only space at 0x50000000
+writing 1696 bytes from the static space at 0x50100000
+writing 61177856 bytes from the dynamic space at 0x1000000000
+writing 2383872 bytes from the immobile space at 0x50200000
+writing 16257024 bytes from the immobile space at 0x52a00000
+done]</code></pre></div><p>it&rsquo;s <code>done</code>. Run <code>ls</code> on the project root:</p><div class="highlight wrap-code"><pre tabindex=0><code>$ ls -lh
+total 80316
+drwxrwxr-x 2 vince vince 4.0K Jan  3 14:35  src
+-rw-rw-r-- 1 vince vince  133 Jan  3 14:35  build.lisp
+-rwxr-xr-x 1 vince vince  79M Jan  3 14:29  myproject
+-rw-rw-r-- 1 vince vince  748 Jan  3 13:36  myproject.asd
+-rw-rw-r-- 1 vince vince   84 Jan  3 14:35  run.lisp</code></pre></div><p>Make the binary executable with <code>chmod + myproject</code> and run it:</p><div class="highlight wrap-code"><pre tabindex=0><code>$ ./myproject
+Starting the web server on port 8900
+$</code></pre></div><p>uuuuh does that look like working?</p><h3 id=the-server-exits-right-after-start-up>&ldquo;The server exits right after start up!&rdquo;</h3><p>The binary was started, it started our web app correctly, but if we
+are not mistaken it closed it right away O_o What&rsquo;s going on?</p><p>This is a difference from running the app from sources or from a binary:</p><ul><li>from sources, and by default, when you run <code>sbcl --load myapp.lisp</code> the myapp.lisp file is loaded and executed, and then we are offered a Lisp REPL (unless we specified <code>--non-interactive</code>).</li><li>from a binary, we are <em>not</em> offered a Lisp REPL.<ul><li>and that&rsquo;s good, we are in &ldquo;production mode&rdquo; now.</li></ul></li></ul><p>We then have to make our web server wait forever.</p><p>Just do this, in the <code>main</code> function:</p><div class="highlight wrap-code"><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-lisp data-lang=lisp><span style=display:flex><span>(defun main ()
+</span></span><span style=display:flex><span>  (start-server <span style=color:#e6db74>:port</span> (find-port:find-port <span style=color:#e6db74>:min</span> *port*))
+</span></span><span style=display:flex><span>  (<span style=color:#a6e22e>sleep</span> most-positive-fixnum))</span></span></code></pre></div><p>We are sleeping, I forgot, a few million years. The top-level process
+is sleeping, but our web server is active in its own thread in the
+background.</p><p>Build the binary again, run it again… it works :)</p><div class="highlight wrap-code"><pre tabindex=0><code>$ ./myproject
+Starting the web server on port 8900
+127.0.0.1 - [2025-01-03 14:47:40] &#34;GET /product/1 HTTP/1.1&#34; 200 54 &#34;http://localhost:8900/?query=on&#34; &#34;Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0&#34;</code></pre></div><p>If you have a web server, try sending the binary there and run it. The
+app will be available to the internet, you can access it with your
+VPS&rsquo;s IP + the app port. It is possible to set the address of the
+Hunchentoot acceptor, and to restrict it to localhost, if you wish.</p><p>Once your app is deployed, there are a couple ways to interact with it
+while it is running, even from the comfort of your editor, at home
+(with a Swank server).</p><p>Let&rsquo;s try the binary compression.</p><h2 id=core-compression>Core compression</h2><p>Compression is done with zlib. Compression levels are comprised
+between -1 and 9. There are small differences in the results.</p><p>Let&rsquo;s try:</p><div class="highlight wrap-code"><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-lisp data-lang=lisp><span style=display:flex><span><span style=color:#75715e>;; build.lisp</span>
+</span></span><span style=display:flex><span>(sb-ext:save-lisp-and-die <span style=color:#e6db74>&#34;myproject&#34;</span>
+</span></span><span style=display:flex><span>                          <span style=color:#e6db74>:executable</span> <span style=color:#66d9ef>t</span>
+</span></span><span style=display:flex><span>                          <span style=color:#e6db74>:toplevel</span> <span style=color:#a6e22e>#&#39;</span>myproject::main
+</span></span><span style=display:flex><span>                          <span style=color:#e6db74>:compression</span> <span style=color:#ae81ff>9</span>)</span></span></code></pre></div><p>The build takes a few more seconds. You see:</p><div class="highlight wrap-code"><pre tabindex=0><code>[saving current Lisp image into myproject:
+writing 0 bytes from the read-only space at 0x50000000
+compressed 0 bytes into 8 at level 9
+writing 1344 bytes from the static space at 0x50100000
+compressed 32768 bytes into 422 at level 9
+writing 66191360 bytes from the dynamic space at 0x1000000000
+…
+done</code></pre></div><p><code>myproject</code> now weights 19MB.</p><p>Because we used templates as strings in our lisp files, our binary is
+self-contained by default, without extra work: it contains the lisp
+implementation with its compiler and debugger, the libraries (web
+server and all), the templates. We can easily deploy this
+app. Congrats!</p><h2 id=closing-words>Closing words</h2><p>We are only scratching the surface of what we&rsquo;ll want to do with a real app:</p><ul><li>parse CLI args</li><li>handle a <code>C-c</code> and other signals</li><li>read configuration files</li><li>setup and use a database</li><li>properly use HTML templates</li><li>add CSS and other static assets</li><li>add interactivity on the web page, with or without JavaScript</li><li>add users login</li><li>add rights to the routes</li><li>build a REST API</li><li>etc</li></ul><p>We will explore those topics in the other chapters of this guide.</p><p>We did a great job for a first app:</p><ul><li>we built a Common Lisp web app</li><li>we created routes, used path and URL parameters</li><li>we defined an HTML form</li><li>we used HTML templates</li><li>we experienced the interactive nature of Common Lisp</li><li>we explored how to run, build and ship Common Lisp programs.</li></ul><p>That&rsquo;s a lot. You are ready for serious applications now!</p><footer class=footline><hr><footer style=text-align:right;font-size:.8rem><div>A motivated Lisper, 2022-present. <a href=https://github.com/sponsors/vindarel/>Show your love!</a> ♥</div><div><a href="https://www.udemy.com/course/common-lisp-programming/?referralCode=2F3D698BBC4326F94358">Learn Common Lisp efficiently in videos</a> 🎥</div></footer></footer></article></div></main></div><aside id=R-sidebar class=default-animation><div id=R-header-topbar class=default-animation></div><div id=R-header-wrapper class=default-animation><div id=R-header class=default-animation><style>#logo svg,#logo svg *{color:#282828;color:var(--MENU-SECTIONS-BG-color);fill:#282828!important;fill:var(--MENU-SECTIONS-BG-color)!important;opacity:.945}a#logo{color:#282828;color:var(--MENU-SECTIONS-BG-color);font-family:work sans,helvetica,tahoma,geneva,arial,sans-serif;font-size:30px;font-weight:300;margin-top:-13px;max-width:60%;text-transform:uppercase;width:226px;white-space:nowrap}a#logo:hover{color:#282828;color:var(--MENU-SECTIONS-BG-color)}#logo svg{margin-bottom:-20px;margin-left:-23.5px;width:40.5%}@media only all and (max-width:59.938em){a#logo{font-size:25px;margin-top:-3px}#logo svg{margin-bottom:-12px;margin-left:-23px}}@media all and (-ms-high-contrast:none){a#logo{margin-top:-58px}#logo svg{margin-bottom:-62px}}</style><a id=logo href=/>🚀</a></div><script>window.index_js_url="/searchindex.js?1736278160"</script><search><form action=/search/index.html method=get><div class="searchbox default-animation"><button class=search-detail type=submit title="Search (CTRL+ALT+f)"><i class="fas fa-search"></i></button>
+<label class=a11y-only for=R-search-by>Search</label>
+<input data-search-input id=R-search-by name=search-by class=search-by type=search placeholder=Search...>
+<button class=search-clear type=button data-search-clear title="Clear search"><i class="fas fa-times" title="Clear search"></i></button></div></form></search><script>var contentLangs=["en"]</script><script src=/js/auto-complete.js?1736278160 defer></script><script src=/js/lunr/lunr.min.js?1736278160 defer></script><script src=/js/lunr/lunr.stemmer.support.min.js?1736278160 defer></script><script src=/js/lunr/lunr.multi.min.js?1736278160 defer></script><script src=/js/lunr/lunr.en.min.js?1736278160 defer></script><script src=/js/search.js?1736278160 defer></script></div><div id=R-homelinks class="default-animation homelinks"><ul><li><a class=padding href=/index.html><i class="fa-fw fas fa-home"></i> Home</a></li></ul><hr class=padding></div><div id=R-content-wrapper class=highlightable><div id=R-topics><ul class="enlarge morespace collapsible-menu"><li class=parent data-nav-id=/tutorial/index.html><input type=checkbox id=R-section-5816d3986a56e91688f1baee8cddaed6 aria-controls=R-subsections-5816d3986a56e91688f1baee8cddaed6 checked><label for=R-section-5816d3986a56e91688f1baee8cddaed6><i class="fa-fw fas fa-chevron-down"></i><i class="fa-fw fas fa-chevron-right"></i><span class=a11y-only>Submenu Tutorial part 1</span></label><a class=padding href=/tutorial/index.html>Tutorial part 1</a><ul id=R-subsections-5816d3986a56e91688f1baee8cddaed6 class=collapsible-menu><li data-nav-id=/tutorial/getting-started/index.html><a class=padding href=/tutorial/getting-started/index.html>Getting Started</a></li><li data-nav-id=/tutorial/first-route/index.html><a class=padding href=/tutorial/first-route/index.html>the first route</a></li><li data-nav-id=/tutorial/first-template/index.html><a class=padding href=/tutorial/first-template/index.html>the first template</a></li><li data-nav-id=/tutorial/first-path-parameter/index.html><a class=padding href=/tutorial/first-path-parameter/index.html>the first path parameter</a></li><li data-nav-id=/tutorial/first-url-parameters/index.html><a class=padding href=/tutorial/first-url-parameters/index.html>the first URL parameter</a></li><li data-nav-id=/tutorial/first-form/index.html><a class=padding href=/tutorial/first-form/index.html>the first form</a></li><li data-nav-id=/tutorial/first-bonus-css/index.html><a class=padding href=/tutorial/first-bonus-css/index.html>Bonus: pimp your CSS</a></li><li class=active data-nav-id=/tutorial/first-build/index.html><a class=padding href=/tutorial/first-build/index.html>the first build</a></li></ul></li><li data-nav-id=/building-blocks/index.html><input type=checkbox id=R-section-677e78e4818ce1699969152db5d5854b aria-controls=R-subsections-677e78e4818ce1699969152db5d5854b><label for=R-section-677e78e4818ce1699969152db5d5854b><i class="fa-fw fas fa-chevron-down"></i><i class="fa-fw fas fa-chevron-right"></i><span class=a11y-only>Submenu Building blocks</span></label><a class=padding href=/building-blocks/index.html>Building blocks</a><ul id=R-subsections-677e78e4818ce1699969152db5d5854b class=collapsible-menu><li data-nav-id=/building-blocks/simple-web-server/index.html><a class=padding href=/building-blocks/simple-web-server/index.html>Simple web server</a></li><li data-nav-id=/building-blocks/static/index.html><a class=padding href=/building-blocks/static/index.html>Static assets</a></li><li data-nav-id=/building-blocks/routing/index.html><a class=padding href=/building-blocks/routing/index.html>Routes and URL parameters</a></li><li data-nav-id=/building-blocks/templates/index.html><a class=padding href=/building-blocks/templates/index.html>Templates</a></li><li data-nav-id=/building-blocks/session/index.html><a class=padding href=/building-blocks/session/index.html>Sessions</a></li><li data-nav-id=/building-blocks/headers/index.html><a class=padding href=/building-blocks/headers/index.html>Headers</a></li><li data-nav-id=/building-blocks/errors-interactivity/index.html><a class=padding href=/building-blocks/errors-interactivity/index.html>Errors and interactivity</a></li><li data-nav-id=/building-blocks/database/index.html><a class=padding href=/building-blocks/database/index.html>Connecting to a database</a></li><li data-nav-id=/building-blocks/user-log-in/index.html><a class=padding href=/building-blocks/user-log-in/index.html>User log-in</a></li><li data-nav-id=/building-blocks/users-and-passwords/index.html><a class=padding href=/building-blocks/users-and-passwords/index.html>Users and passwords</a></li><li data-nav-id=/building-blocks/form-validation/index.html><a class=padding href=/building-blocks/form-validation/index.html>Form validation</a></li><li data-nav-id=/building-blocks/building-binaries/index.html><a class=padding href=/building-blocks/building-binaries/index.html>Running and Building</a></li><li data-nav-id=/building-blocks/deployment/index.html><a class=padding href=/building-blocks/deployment/index.html>Deployment</a></li><li data-nav-id=/building-blocks/remote-debugging/index.html><a class=padding href=/building-blocks/remote-debugging/index.html>Remote debugging</a></li><li data-nav-id=/building-blocks/electron/index.html><a class=padding href=/building-blocks/electron/index.html>Electron</a></li><li data-nav-id=/building-blocks/web-views/index.html><a class=padding href=/building-blocks/web-views/index.html>Web views: cross-platform GUIs</a></li></ul></li><li data-nav-id=/isomorphic-web-frameworks/index.html><input type=checkbox id=R-section-652e7241431d27ef0fbd324cbff58c2a aria-controls=R-subsections-652e7241431d27ef0fbd324cbff58c2a><label for=R-section-652e7241431d27ef0fbd324cbff58c2a><i class="fa-fw fas fa-chevron-down"></i><i class="fa-fw fas fa-chevron-right"></i><span class=a11y-only>Submenu Isomorphic web frameworks</span></label><a class=padding href=/isomorphic-web-frameworks/index.html>Isomorphic web frameworks</a><ul id=R-subsections-652e7241431d27ef0fbd324cbff58c2a class=collapsible-menu><li data-nav-id=/isomorphic-web-frameworks/weblocks/index.html><a class=padding href=/isomorphic-web-frameworks/weblocks/index.html>Weblocks: solving the JavaScript Problem©</a></li></ul></li><li data-nav-id=/see-also/index.html><a class=padding href=/see-also/index.html>See also</a></li></ul></div><div class="padding footermargin footerLangSwitch footerVariantSwitch footerVisitedLinks footerFooter showFooter"></div><div id=R-menu-footer><hr class="padding default-animation footerLangSwitch footerVariantSwitch footerVisitedLinks footerFooter showFooter"><div id=R-prefooter class="footerLangSwitch footerVariantSwitch footerVisitedLinks"><ul><li id=R-select-language-container class=footerLangSwitch><div class="padding menu-control"><i class="fa-fw fas fa-language"></i>
+<span>&nbsp;</span><div class=control-style><label class=a11y-only for=R-select-language>Language</label>
+<select id=R-select-language onchange="location=this.querySelector(this.value).dataset.url"><option id=R-select-language-en value=#R-select-language-en data-url=/tutorial/first-build/index.html lang=en-us selected></option></select></div><div class=clear></div></div></li><li id=R-select-variant-container class=footerVariantSwitch><div class="padding menu-control"><i class="fa-fw fas fa-paint-brush"></i>
+<span>&nbsp;</span><div class=control-style><label class=a11y-only for=R-select-variant>Theme</label>
+<select id=R-select-variant onchange=window.variants&&variants.changeVariant(this.value)><option id=R-select-variant-auto value=auto selected>Auto</option></select></div><div class=clear></div></div><script>window.variants&&variants.markSelectedVariant()</script></li><li class=footerVisitedLinks><div class="padding menu-control"><i class="fa-fw fas fa-history"></i>
+<span>&nbsp;</span><div class=control-style><button onclick=clearHistory()>Clear History</button></div><div class=clear></div></div></li></ul></div><div id=R-footer class="footerFooter showFooter"><p>Built with <a href=https://github.com/McShelby/hugo-theme-relearn title=love><i class="fas fa-heart"></i></a> by <a href=https://gohugo.io/>Hugo</a></p></div></div></div></aside><script src=/js/clipboard.min.js?1736278160 defer></script><script src=/js/perfect-scrollbar.min.js?1736278160 defer></script><script src=/js/theme.js?1736278160 defer></script></body></html>

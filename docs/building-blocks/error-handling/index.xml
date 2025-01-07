@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Errors and interactivity :: WALK book</title>
+    <link>http://localhost:1313/building-blocks/error-handling/index.html</link>
+    <description>In all frameworks, we can choose the level of interactivity.&#xA;The web framework can be interactive in different degrees. What should it do when an error happens?&#xA;not being interactive: it returns a 404 page and prints the error output on the REPL not interactive but developper friendly: it can show the lisp error message on the HTML page, as well as the full Lisp backtrace it can let the developper have the interactive debugger: in that case the framework doesn’t catch the error, it lets it through, and we the developper deal with it as in a normal Slime session. We see this by default:</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <atom:link href="http://localhost:1313/building-blocks/error-handling/index.xml" rel="self" type="application/rss+xml" />
+  </channel>
+</rss>

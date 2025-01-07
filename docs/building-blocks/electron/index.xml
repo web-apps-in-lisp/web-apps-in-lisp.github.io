@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Electron :: Web Apps in Lisp: Know-how</title><link>http://example.org/building-blocks/electron/index.html</link><description>Electron is heavy, but really cross-platform, and it has many tools around it. It allows to build releases for the three major OS from your development machine, its ecosystem has tools to handle updates, etc.
+Advise: study it before discarding it.
+It isn’t however the only portable web view solution. See our next section.
+Info This page appeared first on lisp-journey: three web views for Common Lisp, cross-platform GUIs.</description><generator>Hugo</generator><language>en-us</language><atom:link href="http://example.org/building-blocks/electron/index.xml" rel="self" type="application/rss+xml"/></channel></rss>

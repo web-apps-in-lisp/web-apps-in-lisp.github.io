@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Headers :: Web Apps in Lisp: Know-how</title><link>http://example.org/building-blocks/headers/index.html</link><description>A quick reference.
+These functions have to be used in the context of a web request.
+Set headers Use header-out to set headers, like this:
+(setf (hunchentoot:header-out "HX-Trigger") "myEvent") This sets the header of the current request.
+USe headers-out (plural) to get an association list of headers:
+An alist of the outgoing http headers not including the ‘Set-Cookie’, ‘Content-Length’, and ‘Content-Type’ headers. Use the functions HEADER-OUT and (SETF HEADER-OUT) to modify this slot.</description><generator>Hugo</generator><language>en-us</language><atom:link href="http://example.org/building-blocks/headers/index.xml" rel="self" type="application/rss+xml"/></channel></rss>

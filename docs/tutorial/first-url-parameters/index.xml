@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>the first URL parameter :: Web Apps in Lisp: Know-how</title><link>http://example.org/tutorial/first-url-parameters/index.html</link><description>As of now we can access URLs like these: http://localhost:8899/product/0 where 0 is a path parameter.
+We will soon need URL parameters so let’s add one to our routes.
+We want a debug URL parameter that will show us more data. The URL will accept a ?debug=t part.
+We have this product route:
+(easy-routes:defroute product-route ("/product/:n") (&amp;path (n 'integer)) (render *template-product* :product (get-product n))) With or without the &amp;path part, either is good for now, so let’s remove it for clarity:</description><generator>Hugo</generator><language>en-us</language><atom:link href="http://example.org/tutorial/first-url-parameters/index.xml" rel="self" type="application/rss+xml"/></channel></rss>

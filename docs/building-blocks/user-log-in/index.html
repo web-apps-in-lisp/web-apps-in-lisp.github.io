@@ -1,0 +1,281 @@
+<!doctype html><html lang=en-us dir=ltr itemscope itemtype=http://schema.org/Article><head><meta charset=utf-8><meta name=viewport content="height=device-height,width=device-width,initial-scale=1,minimum-scale=1"><meta name=generator content="Hugo 0.136.0"><meta name=generator content="Relearn 7.0.1+72a875f1db967152c77914cff4d53f8fcee0e619"><meta name=description content="How do you check if a user is logged-in, and how do you do the actual log in?
+We show an example, without handling passwords yet. See the next section for passwords.
+We’ll build a simple log-in page to an admin/ private dashboard.
+What do we need to do exactly?"><meta name=author content="vindarel"><meta name=twitter:card content="summary"><meta name=twitter:title content="User log-in :: Web Apps in Lisp: Know-how"><meta name=twitter:description content="How do you check if a user is logged-in, and how do you do the actual log in?
+We show an example, without handling passwords yet. See the next section for passwords.
+We’ll build a simple log-in page to an admin/ private dashboard.
+What do we need to do exactly?"><meta property="og:url" content="http://example.org/building-blocks/user-log-in/index.html"><meta property="og:site_name" content="Web Apps in Lisp: Know-how"><meta property="og:title" content="User log-in :: Web Apps in Lisp: Know-how"><meta property="og:description" content="How do you check if a user is logged-in, and how do you do the actual log in?
+We show an example, without handling passwords yet. See the next section for passwords.
+We’ll build a simple log-in page to an admin/ private dashboard.
+What do we need to do exactly?"><meta property="og:locale" content="en_us"><meta property="og:type" content="article"><meta property="article:section" content="Building blocks"><meta itemprop=name content="User log-in :: Web Apps in Lisp: Know-how"><meta itemprop=description content="How do you check if a user is logged-in, and how do you do the actual log in?
+We show an example, without handling passwords yet. See the next section for passwords.
+We’ll build a simple log-in page to an admin/ private dashboard.
+What do we need to do exactly?"><meta itemprop=wordCount content="1533"><title>User log-in :: Web Apps in Lisp: Know-how</title>
+<link href=/building-blocks/user-log-in/index.xml rel=alternate type=application/rss+xml title="User log-in :: Web Apps in Lisp: Know-how"><link href=/css/fontawesome-all.min.css?1736278160 rel=stylesheet media=print onload='this.media="all",this.onload=null'><noscript><link href=/css/fontawesome-all.min.css?1736278160 rel=stylesheet></noscript><link href=/css/nucleus.css?1736278160 rel=stylesheet><link href=/css/auto-complete.css?1736278160 rel=stylesheet media=print onload='this.media="all",this.onload=null'><noscript><link href=/css/auto-complete.css?1736278160 rel=stylesheet></noscript><link href=/css/perfect-scrollbar.min.css?1736278160 rel=stylesheet><link href=/css/fonts.css?1736278160 rel=stylesheet media=print onload='this.media="all",this.onload=null'><noscript><link href=/css/fonts.css?1736278160 rel=stylesheet></noscript><link href=/css/theme.css?1736278160 rel=stylesheet><link href=/css/theme-auto.css?1736278160 rel=stylesheet id=R-variant-style><link href=/css/chroma-auto.css?1736278160 rel=stylesheet id=R-variant-chroma-style><link href=/css/print.css?1736278160 rel=stylesheet media=print><script src=/js/variant.js?1736278160></script><script>window.relearn=window.relearn||{},window.relearn.relBasePath="../..",window.relearn.relBaseUri="../..",window.relearn.absBaseUri="http://example.org",window.relearn.disableAnchorCopy=!1,window.relearn.disableAnchorScrolling=!1,window.variants&&variants.init(["auto"]),window.T_Copy_to_clipboard=`Copy to clipboard`,window.T_Copied_to_clipboard=`Copied to clipboard!`,window.T_Copy_link_to_clipboard=`Copy link to clipboard`,window.T_Link_copied_to_clipboard=`Copied link to clipboard!`,window.T_Reset_view=`Reset view`,window.T_View_reset=`View reset!`,window.T_No_results_found=`No results found for "{0}"`,window.T_N_results_found=`{1} results found for "{0}"`</script></head><body class="mobile-support html" data-url=/building-blocks/user-log-in/index.html><div id=R-body class=default-animation><div id=R-body-overlay></div><nav id=R-topbar><div class=topbar-wrapper><div class=topbar-sidebar-divider></div><div class="topbar-area topbar-area-start" data-area=start><div class="topbar-button topbar-button-sidebar" data-content-empty=disable data-width-s=show data-width-m=hide data-width-l=hide><button class=topbar-control onclick=toggleNav() type=button title="Menu (CTRL+ALT+n)"><i class="fa-fw fas fa-bars"></i></button></div><div class="topbar-button topbar-button-toc" data-content-empty=hide data-width-s=show data-width-m=show data-width-l=show><button class=topbar-control onclick=toggleTopbarFlyout(this) type=button title="Table of Contents (CTRL+ALT+t)"><i class="fa-fw fas fa-list-alt"></i></button><div class=topbar-content><div class=topbar-content-wrapper><nav class=TableOfContents><ul><li><a href=#get-users>Get users</a></li><li><a href=#templates-login-welcome>Templates: login, welcome</a></li><li><a href=#views-are-we-logged-in>Views: are we logged in?</a></li><li><a href=#first-test>First test</a></li><li><a href=#login-post-request>login: POST request</a></li><li><a href=#logout>Logout</a></li><li><a href=#redirect-and-generate-an-url-by-name>Redirect and generate an URL by name</a></li><li><a href=#hunchentoot-code>Hunchentoot code</a></li><li><a href=#full-code>Full code</a></li><li><a href=#caveman>Caveman</a></li></ul></nav></div></div></div></div><ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype=http://schema.org/BreadcrumbList><li itemscope itemtype=https://schema.org/ListItem itemprop=itemListElement><a itemprop=item href=/building-blocks/index.html><span itemprop=name>Building blocks</span></a><meta itemprop=position content="1">&nbsp;>&nbsp;</li><li itemscope itemtype=https://schema.org/ListItem itemprop=itemListElement><span itemprop=name>User log-in</span><meta itemprop=position content="2"></li></ol><div class="topbar-area topbar-area-end" data-area=end><div class="topbar-button topbar-button-prev" data-content-empty=disable data-width-s=show data-width-m=show data-width-l=show><a class=topbar-control href=/building-blocks/database/index.html title="Connecting to a database (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a></div><div class="topbar-button topbar-button-next" data-content-empty=disable data-width-s=show data-width-m=show data-width-l=show><a class=topbar-control href=/building-blocks/users-and-passwords/index.html title="Users and passwords (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a></div><div class="topbar-button topbar-button-more" data-content-empty=hide data-width-s=show data-width-m=show data-width-l=show><button class=topbar-control onclick=toggleTopbarFlyout(this) type=button title=More><i class="fa-fw fas fa-ellipsis-v"></i></button><div class=topbar-content><div class=topbar-content-wrapper><div class="topbar-area topbar-area-more" data-area=more></div></div></div></div></div></div></nav><div id=R-main-overlay></div><main id=R-body-inner class="highlightable building-blocks" tabindex=-1><div class=flex-block-wrapper><article class=default><header class=headline></header><h1 id=user-log-in>User log-in</h1><p>How do you check if a user is logged-in, and how do you do the actual log in?</p><p>We show an example, without handling passwords yet. See the next section for passwords.</p><p>We&rsquo;ll build a simple log-in page to an <code>admin/</code> private dashboard.</p><p><a href=#R-image-0f12c3a30beae50eb730faef5e30eea5 class=lightbox-link><img class="noborder lazy lightbox noshadow figure-image" loading=lazy src=/building-blocks/login.png style=height:auto;width:auto></a>
+<a href=javascript:history.back(); class=lightbox-back id=R-image-0f12c3a30beae50eb730faef5e30eea5><img class="noborder lazy lightbox noshadow lightbox-image" loading=lazy src=/building-blocks/login.png></a></p><p><a href=#R-image-26e88e24bb216e59a01ca8e522309311 class=lightbox-link><img class="noborder lazy lightbox noshadow figure-image" loading=lazy src=/building-blocks/logged-in.png style=height:auto;width:auto></a>
+<a href=javascript:history.back(); class=lightbox-back id=R-image-26e88e24bb216e59a01ca8e522309311><img class="noborder lazy lightbox noshadow lightbox-image" loading=lazy src=/building-blocks/logged-in.png></a></p><p>What do we need to do exactly?</p><ul><li>we need a function to get a user by its ID</li><li>we need a function to check that a password is correct for a given user</li><li>we need two templates:<ul><li>a login template</li><li>a template for a logged-in user</li></ul></li><li>we need a route and we need to handle a POST request<ul><li>when the log-in is successful, we need to store a user ID in a web session</li></ul></li></ul><p>We choose to structure our app with an <code>admin/</code> URL that will show
+both the login page or the &ldquo;dashboard&rdquo; for logged-in users.</p><p>We use these libraries:</p><div class="highlight wrap-code"><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-lisp data-lang=lisp><span style=display:flex><span>(ql:quickload <span style=color:#f92672>&#39;</span>(<span style=color:#e6db74>&#34;hunchentoot&#34;</span> <span style=color:#e6db74>&#34;djula&#34;</span> <span style=color:#e6db74>&#34;easy-routes&#34;</span>))</span></span></code></pre></div><p>We still work from inside our <code>:myproject</code> package. You should have
+this at the top of your file:</p><div class="highlight wrap-code"><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-lisp data-lang=lisp><span style=display:flex><span>(in-package <span style=color:#e6db74>:myproject</span>)</span></span></code></pre></div><p>Let&rsquo;s start with the model functions.</p><h2 id=get-users>Get users</h2><div class="highlight wrap-code"><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-lisp data-lang=lisp><span style=display:flex><span>(defun get-user (name)
+</span></span><span style=display:flex><span>  (<span style=color:#a6e22e>list</span> <span style=color:#e6db74>:name</span> name <span style=color:#e6db74>:password</span> <span style=color:#e6db74>&#34;demo&#34;</span>)) <span style=color:#75715e>;; &lt;--- all our passwords are &#34;demo&#34;</span></span></span></code></pre></div><p>Yes indeed, that&rsquo;s a dummy function. You will add your own logic
+later, we focus on the web stack. Here we return a user object, a
+<em>plist</em> with a name and a password. So to speak.</p><div class="highlight wrap-code"><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-lisp data-lang=lisp><span style=display:flex><span>(defun valid-user-p (name password)
+</span></span><span style=display:flex><span>  (<span style=color:#66d9ef>let</span> ((user (get-user name)))
+</span></span><span style=display:flex><span>    (and user
+</span></span><span style=display:flex><span>         (<span style=color:#a6e22e>string=</span> name (<span style=color:#a6e22e>getf</span> user <span style=color:#e6db74>:name</span>))
+</span></span><span style=display:flex><span>         (<span style=color:#a6e22e>string=</span> password (<span style=color:#a6e22e>getf</span> user <span style=color:#e6db74>:password</span>)))))</span></span></code></pre></div><p>Look, what if we stored our own name and password in a file? No need
+of a DB for a personal or a toy web app.</p><p>In <code>creds.lisp-expr</code>:</p><div class="highlight wrap-code"><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-lisp data-lang=lisp><span style=display:flex><span>(<span style=color:#e6db74>:name</span> <span style=color:#e6db74>&#34;me&#34;</span> <span style=color:#e6db74>:password</span> <span style=color:#e6db74>&#34;yadadada&#34;</span>)</span></span></code></pre></div><p>the &ldquo;.lisp-expr&rdquo; is just a convention, so that your tools won&rsquo;t see it
+as a lisp source.</p><p>Read it back in with <code>uiop:read-file-form</code>:</p><div class="highlight wrap-code"><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-lisp data-lang=lisp><span style=display:flex><span>(defparameter *me* (uiop:read-file-form <span style=color:#e6db74>&#34;creds.lisp-expr&#34;</span>))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>(<span style=color:#a6e22e>getf</span> *me* <span style=color:#e6db74>:name</span>)
+</span></span><span style=display:flex><span><span style=color:#75715e>;; =&gt; &#34;me&#34;</span></span></span></code></pre></div><p>Cool? my 2c.</p><h2 id=templates-login-welcome>Templates: login, welcome</h2><p>For convenience we again define our templates as strings.</p><div class="highlight wrap-code"><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-lisp data-lang=lisp><span style=display:flex><span><span style=color:#75715e>;;; Templates.</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;; XXX: we have to escape the quotes in our string templates. When they are in files we don&#39;t.</span>
+</span></span><span style=display:flex><span>(defparameter *template-login* <span style=color:#e6db74>&#34;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>  &lt;html lang=en&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>   &lt;head&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    &lt;meta charset=UTF-8&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    &lt;title&gt;Login&lt;/title&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>   &lt;/head&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>   &lt;body&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    &lt;div&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     Login form.
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    &lt;/div&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    &lt;div&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     Any user name is valid. The password is \&#34;demo\&#34;.
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    &lt;/div&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    {% if error %}
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    &lt;p style=\&#34;color: red;\&#34;&gt;Invalid username or password&lt;/p&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    {% endif %}
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    &lt;form method=post action=\&#34;/admin/\&#34;&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     &lt;p&gt;Username:
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>      {% if name %}
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>      &lt;input type=text name=name value=\&#34;{{ name }}\&#34;&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>      {% else %}
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>      &lt;input type=text name=name&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>      {% endif %}
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     &lt;p&gt;Password:
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>      &lt;input type=password name=password&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     &lt;p&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>      &lt;input type=submit value=\&#34;Log In\&#34;&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    &lt;/form&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>   &lt;/body&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>  &lt;/html&gt; &#34;</span>
+</span></span><span style=display:flex><span>  )
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>(defparameter *template-welcome* <span style=color:#e6db74>&#34;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>  &lt;html lang=en&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>   &lt;head&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    &lt;meta charset=UTF-8&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    &lt;title&gt;Welcome&lt;/title&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>   &lt;/head&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>   &lt;body&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    &lt;h1&gt;Welcome, {{ name }}!&lt;/h1&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    &lt;div&gt;You are logged in to your admin dashboard.&lt;/div&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    &lt;a href=\&#34;/admin/logout\&#34;&gt;Log out&lt;/a&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>   &lt;/body&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>  &lt;/html&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>  &#34;</span>)</span></span></code></pre></div><p>Please refer to the demo to understand how we use them (and their
+shortcomings). We need the <code>render</code> function (see also the full code
+below).</p><h2 id=views-are-we-logged-in>Views: are we logged in?</h2><p>You can start with this route:</p><div class="highlight wrap-code"><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-lisp data-lang=lisp><span style=display:flex><span>(defun loggedin-p ()
+</span></span><span style=display:flex><span>  (hunchentoot:session-value <span style=color:#e6db74>&#39;name</span>))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;; GET</span>
+</span></span><span style=display:flex><span>(easy-routes:defroute admin-route (<span style=color:#e6db74>&#34;/admin/&#34;</span> <span style=color:#e6db74>:method</span> <span style=color:#e6db74>:get</span>) ()
+</span></span><span style=display:flex><span>  (<span style=color:#66d9ef>if</span> (loggedin-p)
+</span></span><span style=display:flex><span>    (render *template-welcome* <span style=color:#e6db74>:name</span> (hunchentoot:session-value <span style=color:#e6db74>&#39;name</span>))
+</span></span><span style=display:flex><span>    (render *template-login*))</span></span></code></pre></div><p>We are simply querying the session for the user name. If it&rsquo;s present,
+that means we have established it at login.</p><p>Now is a great time to use easy-routes&rsquo; &ldquo;decorators&rdquo; (see the <a href=/building-blocks/routing/index.html>Routing</a> section).</p><p>We can shorten the route to this:</p><div class="highlight wrap-code"><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-lisp data-lang=lisp><span style=display:flex><span>(defun @auth (next)
+</span></span><span style=display:flex><span>  (log:info <span style=color:#e6db74>&#34;checking session&#34;</span>)
+</span></span><span style=display:flex><span>  (<span style=color:#66d9ef>if</span> (loggedin-p)
+</span></span><span style=display:flex><span>      (<span style=color:#a6e22e>funcall</span> next)
+</span></span><span style=display:flex><span>      (render *template-login*)))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;; GET</span>
+</span></span><span style=display:flex><span>(easy-routes:defroute admin-route (<span style=color:#e6db74>&#34;/admin/&#34;</span> <span style=color:#e6db74>:method</span> <span style=color:#e6db74>:get</span> <span style=color:#e6db74>:decorators</span> ((@auth))) ()
+</span></span><span style=display:flex><span>  (render *template-welcome* <span style=color:#e6db74>:name</span> (hunchentoot:session-value <span style=color:#e6db74>&#39;name</span>)))</span></span></code></pre></div><p>Yes, <code>((@auth))</code> is between 2 <code>(( ))</code> because that will be useful. We
+can call &ldquo;decorators&rdquo; with arguments.</p><p>The two routes are strictly equivalent, but the second one allows to
+offload and refactor logic to other functions.</p><h2 id=first-test>First test</h2><p>Please see the tutorial for how to start a web server.</p><p>If you compiled the routes while a connection to a web server is
+active, then your route is accessible.</p><p>Visit <a href=http://localhost:8899/admin/ rel=external target=_blank>http://localhost:8899/admin/</a>, you should see the login form.</p><p>We didn&rsquo;t handle the POST request yet.</p><h2 id=login-post-request>login: POST request</h2><div class="highlight wrap-code"><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-lisp data-lang=lisp><span style=display:flex><span><span style=color:#75715e>;; POST</span>
+</span></span><span style=display:flex><span>(easy-routes:defroute admin-route/POST (<span style=color:#e6db74>&#34;/admin/&#34;</span> <span style=color:#e6db74>:method</span> <span style=color:#e6db74>:post</span>) (name password)
+</span></span><span style=display:flex><span>  (cond
+</span></span><span style=display:flex><span>    ((valid-user-p name password)
+</span></span><span style=display:flex><span>     (hunchentoot:start-session)
+</span></span><span style=display:flex><span>     (setf (hunchentoot:session-value <span style=color:#e6db74>&#39;name</span>) name)
+</span></span><span style=display:flex><span>     (render *template-welcome* <span style=color:#e6db74>:name</span> name))
+</span></span><span style=display:flex><span>    (<span style=color:#66d9ef>t</span>
+</span></span><span style=display:flex><span>     (render *template-login* <span style=color:#e6db74>:name</span> name <span style=color:#e6db74>:error</span> <span style=color:#66d9ef>t</span>))))</span></span></code></pre></div><p>Beware of this gotcha: the route names must be unique. Otherwise, you
+will override your previous route definition. We name it
+<code>admin-route/POST</code>.</p><p>Our login HTML defines two inputs:</p><pre><code>&lt;input type=text name=name&gt;
+&lt;input type=text name=password&gt;
+</code></pre><p>that&rsquo;s why we declared those as POST
+parameters in the route with <code>(name password)</code>.</p><p>Our <code>valid-user-p</code> function only checks that the password equals &ldquo;demo&rdquo;.</p><p>Depending on the result, we display the login page again, with an
+error message, or we display our welcome page and right before we do
+these important steps:</p><ul><li>we start a session</li><li>and we store our user ID</li></ul><p>We are logged in o/</p><h2 id=logout>Logout</h2><p>Notice the logout button in the welcome page.</p><p>Let&rsquo;s define the logout route:</p><div class="highlight wrap-code"><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-lisp data-lang=lisp><span style=display:flex><span>(hunchentoot:define-easy-handler (logout <span style=color:#e6db74>:uri</span> <span style=color:#e6db74>&#34;/admin/logout&#34;</span>) ()
+</span></span><span style=display:flex><span>  (hunchentoot:delete-session-value <span style=color:#e6db74>&#39;name</span>)
+</span></span><span style=display:flex><span>  (hunchentoot:redirect <span style=color:#e6db74>&#34;/admin/&#34;</span>))</span></span></code></pre></div><p>We have to delete our user&rsquo;s ID! That&rsquo;s the step not to forget.</p><p>We could also delete the current session object altogether with:</p><div class="highlight wrap-code"><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-lisp data-lang=lisp><span style=display:flex><span>(hunchentoot:remove-session (hunchentoot:*session*))</span></span></code></pre></div><p>that depends if you stored more data. The <code>*session*</code> &ldquo;global&rdquo; object
+is the session in the context of the current request.</p><p>At last we redirect to the <code>admin/</code> URL, which is going to check the user
+ID in the session, which isn&rsquo;t present anymore, and thus show the
+login form.</p><p>And we&rsquo;ve gone circle.</p><h2 id=redirect-and-generate-an-url-by-name>Redirect and generate an URL by name</h2><p>We just used a redirect.</p><p>You will notice that the routes <code>/admin</code> and <code>/admin/</code> are
+different. We set up a quick redirect.</p><div class="highlight wrap-code"><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-lisp data-lang=lisp><span style=display:flex><span>(hunchentoot:define-easy-handler (admin2 <span style=color:#e6db74>:uri</span> <span style=color:#e6db74>&#34;/admin&#34;</span>) ()
+</span></span><span style=display:flex><span>  (hunchentoot:redirect <span style=color:#e6db74>&#34;/admin/&#34;</span>))</span></span></code></pre></div><p>but wait, did we copy an URL by name? We can instead use</p><div class="highlight wrap-code"><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-lisp data-lang=lisp><span style=display:flex><span>(easy-routes:genurl <span style=color:#e6db74>&#39;admin-route</span>)
+</span></span><span style=display:flex><span><span style=color:#75715e>;; &#34;/admin/&#34;</span></span></span></code></pre></div><p>We also have <code>genurl*</code> to generate an absolute URL:</p><div class="highlight wrap-code"><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-lisp data-lang=lisp><span style=display:flex><span>(easy-routes:genurl* <span style=color:#e6db74>&#39;admin-route</span>)
+</span></span><span style=display:flex><span><span style=color:#75715e>;; &#34;http://localhost/admin/&#34;</span></span></span></code></pre></div><p>These functions accept arguments to set the PATH and URL parameters.</p><h2 id=hunchentoot-code>Hunchentoot code</h2><p>This is the equivalent Hunchentoot route:</p><div class="highlight wrap-code"><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-lisp data-lang=lisp><span style=display:flex><span>(hunchentoot:define-easy-handler (admin <span style=color:#e6db74>:uri</span> <span style=color:#e6db74>&#34;/dashboard/&#34;</span>) (name password)
+</span></span><span style=display:flex><span>    (ecase (hunchentoot:request-method*)
+</span></span><span style=display:flex><span>      (<span style=color:#e6db74>:get</span>
+</span></span><span style=display:flex><span>       (<span style=color:#66d9ef>if</span> (loggedin-p)
+</span></span><span style=display:flex><span>           (render *template-welcome*)
+</span></span><span style=display:flex><span>           (render *template-login*)))
+</span></span><span style=display:flex><span>      (<span style=color:#e6db74>:post</span>
+</span></span><span style=display:flex><span>       (cond
+</span></span><span style=display:flex><span>         ((valid-user-p name password)
+</span></span><span style=display:flex><span>          (hunchentoot:start-session)
+</span></span><span style=display:flex><span>          (setf (hunchentoot:session-value <span style=color:#e6db74>&#39;name</span>) name)
+</span></span><span style=display:flex><span>          (render *template-welcome* <span style=color:#e6db74>:name</span> name))
+</span></span><span style=display:flex><span>         (<span style=color:#66d9ef>t</span>
+</span></span><span style=display:flex><span>          (render *template-login* <span style=color:#e6db74>:name</span> name <span style=color:#e6db74>:error</span> <span style=color:#66d9ef>t</span>))))
+</span></span><span style=display:flex><span>      ))</span></span></code></pre></div><p>Remarks:</p><ul><li>we can&rsquo;t dispatch on the request type, so we use the <code>ecase</code> on <code>request-method*</code></li><li>we can&rsquo;t use &ldquo;decorators&rdquo; so we use branching</li><li>it isn&rsquo;t very clear but <code>name</code> and <code>password</code> are only used in the POST part.<ul><li>we can also use <code>(hunchentoot:post-parameter "name")</code> (the parameter as a string)</li></ul></li><li>all this adds nesting in our function but otherwise, it&rsquo;s pretty similar.</li></ul><h2 id=full-code>Full code</h2><div class="highlight wrap-code"><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-lisp data-lang=lisp><span style=display:flex><span>(in-package <span style=color:#e6db74>:myproject</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;; User-facing paramaters.</span>
+</span></span><span style=display:flex><span>(defparameter *port* <span style=color:#ae81ff>8899</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;; Internal variables.</span>
+</span></span><span style=display:flex><span>(defvar *server* <span style=color:#66d9ef>nil</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;; Models.</span>
+</span></span><span style=display:flex><span>(defun get-user (name)
+</span></span><span style=display:flex><span>  (<span style=color:#a6e22e>list</span> <span style=color:#e6db74>:name</span> name <span style=color:#e6db74>:password</span> <span style=color:#e6db74>&#34;demo&#34;</span>)) <span style=color:#75715e>;; &lt;--- all our passwords are &#34;demo&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>(defun valid-user-p (name password)
+</span></span><span style=display:flex><span>  (<span style=color:#66d9ef>let</span> ((user (get-user name)))
+</span></span><span style=display:flex><span>    (and user
+</span></span><span style=display:flex><span>         (<span style=color:#a6e22e>string=</span> name (<span style=color:#a6e22e>getf</span> user <span style=color:#e6db74>:name</span>))
+</span></span><span style=display:flex><span>         (<span style=color:#a6e22e>string=</span> password (<span style=color:#a6e22e>getf</span> user <span style=color:#e6db74>:password</span>)))))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;; Templates.</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;; XXX: we have to escape the quotes in our string templates. When they are in files we don&#39;t.</span>
+</span></span><span style=display:flex><span>(defparameter *template-login* <span style=color:#e6db74>&#34;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>  &lt;html lang=en&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>   &lt;head&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    &lt;meta charset=UTF-8&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    &lt;title&gt;Login&lt;/title&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>   &lt;/head&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>   &lt;body&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    &lt;div&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     Login form.
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    &lt;/div&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    &lt;div&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     Any user name is valid. The password is \&#34;demo\&#34;.
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    &lt;/div&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    {% if error %}
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    &lt;p style=\&#34;color: red;\&#34;&gt;Invalid username or password&lt;/p&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    {% endif %}
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    &lt;form method=post action=\&#34;/admin/\&#34;&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     &lt;p&gt;Username:
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>      {% if name %}
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>      &lt;input type=text name=name value=\&#34;{{ name }}\&#34;&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>      {% else %}
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>      &lt;input type=text name=name&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>      {% endif %}
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     &lt;p&gt;Password:
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>      &lt;input type=password name=password&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     &lt;p&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>      &lt;input type=submit value=\&#34;Log In\&#34;&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    &lt;/form&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>   &lt;/body&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>  &lt;/html&gt; &#34;</span>
+</span></span><span style=display:flex><span>  )
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>(defparameter *template-welcome* <span style=color:#e6db74>&#34;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>  &lt;html lang=en&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>   &lt;head&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    &lt;meta charset=UTF-8&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    &lt;title&gt;Welcome&lt;/title&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>   &lt;/head&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>   &lt;body&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    &lt;h1&gt;Welcome, {{ name }}!&lt;/h1&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    &lt;div&gt;You are logged in to your admin dashboard.&lt;/div&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    &lt;a href=\&#34;/admin/logout\&#34;&gt;Log out&lt;/a&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>   &lt;/body&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>  &lt;/html&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>  &#34;</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>(defun render (template <span style=color:#66d9ef>&amp;rest</span> args)
+</span></span><span style=display:flex><span>  (<span style=color:#a6e22e>apply</span>
+</span></span><span style=display:flex><span>   <span style=color:#a6e22e>#&#39;</span>djula:render-template*
+</span></span><span style=display:flex><span>   (djula:compile-string template)
+</span></span><span style=display:flex><span>   <span style=color:#66d9ef>nil</span>
+</span></span><span style=display:flex><span>   args))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;; Views.</span>
+</span></span><span style=display:flex><span>(defun loggedin-p ()
+</span></span><span style=display:flex><span>  (hunchentoot:session-value <span style=color:#e6db74>&#39;name</span>))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>(defun @auth (next)
+</span></span><span style=display:flex><span>  (<span style=color:#66d9ef>if</span> (loggedin-p)
+</span></span><span style=display:flex><span>      (<span style=color:#a6e22e>funcall</span> next)
+</span></span><span style=display:flex><span>      (render *template-login*)))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;; GET</span>
+</span></span><span style=display:flex><span>(easy-routes:defroute admin-route (<span style=color:#e6db74>&#34;/admin/&#34;</span> <span style=color:#e6db74>:method</span> <span style=color:#e6db74>:get</span> <span style=color:#e6db74>:decorators</span> ((@auth))) ()
+</span></span><span style=display:flex><span>  (render *template-welcome* <span style=color:#e6db74>:name</span> (hunchentoot:session-value <span style=color:#e6db74>&#39;name</span>)))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;; POST</span>
+</span></span><span style=display:flex><span>(easy-routes:defroute admin-route/POST (<span style=color:#e6db74>&#34;/admin/&#34;</span> <span style=color:#e6db74>:method</span> <span style=color:#e6db74>:post</span>) (name password)
+</span></span><span style=display:flex><span>  (cond
+</span></span><span style=display:flex><span>    ((valid-user-p name password)
+</span></span><span style=display:flex><span>     (hunchentoot:start-session)
+</span></span><span style=display:flex><span>     (setf (hunchentoot:session-value <span style=color:#e6db74>&#39;name</span>) name)
+</span></span><span style=display:flex><span>     (render *template-welcome* <span style=color:#e6db74>:name</span> name))
+</span></span><span style=display:flex><span>    (<span style=color:#66d9ef>t</span>
+</span></span><span style=display:flex><span>     (render *template-login* <span style=color:#e6db74>:name</span> name <span style=color:#e6db74>:error</span> <span style=color:#66d9ef>t</span>))))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>(hunchentoot:define-easy-handler (logout <span style=color:#e6db74>:uri</span> <span style=color:#e6db74>&#34;/admin/logout&#34;</span>) ()
+</span></span><span style=display:flex><span>  (hunchentoot:delete-session-value <span style=color:#e6db74>&#39;name</span>)
+</span></span><span style=display:flex><span>  (hunchentoot:redirect (easy-routes:genurl <span style=color:#e6db74>&#39;admin-route</span>)))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;; Server.</span>
+</span></span><span style=display:flex><span>(defun start-server (<span style=color:#66d9ef>&amp;key</span> (port *port*))
+</span></span><span style=display:flex><span>  (<span style=color:#a6e22e>format</span> <span style=color:#66d9ef>t</span> <span style=color:#e6db74>&#34;~&amp;Starting the login demo on port ~a~&amp;&#34;</span> port)
+</span></span><span style=display:flex><span>  (unless *server*
+</span></span><span style=display:flex><span>    (setf *server* (<span style=color:#a6e22e>make-instance</span> <span style=color:#e6db74>&#39;hunchentoot:easy-acceptor</span> <span style=color:#e6db74>:port</span> port)))
+</span></span><span style=display:flex><span>  (hunchentoot:start *server*))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>(defun stop-server ()
+</span></span><span style=display:flex><span>  (hunchentoot:stop *server*))</span></span></code></pre></div><h2 id=caveman>Caveman</h2><p>In Caveman, <code>*session*</code> is a hash-table that represents the session&rsquo;s
+data. Here are our login and logout functions:</p><div class="highlight wrap-code"><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-lisp data-lang=lisp><span style=display:flex><span>(defun login (user)
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>&#34;Log the user into the session&#34;</span>
+</span></span><span style=display:flex><span>  (setf (<span style=color:#a6e22e>gethash</span> <span style=color:#e6db74>:user</span> *session*) user))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>(defun logout ()
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>&#34;Log the user out of the session.&#34;</span>
+</span></span><span style=display:flex><span>  (setf (<span style=color:#a6e22e>gethash</span> <span style=color:#e6db74>:user</span> *session*) <span style=color:#66d9ef>nil</span>))</span></span></code></pre></div><p>We define a simple predicate:</p><div class="highlight wrap-code"><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-lisp data-lang=lisp><span style=display:flex><span>(defun logged-in-p ()
+</span></span><span style=display:flex><span>  (<span style=color:#a6e22e>gethash</span> <span style=color:#e6db74>:user</span> cm:*session*))</span></span></code></pre></div><p>We don&rsquo;t know a mechanism as easy-routes&rsquo; &ldquo;decorators&rdquo; but we define a
+<code>with-logged-in</code> macro:</p><div class="highlight wrap-code"><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-lisp data-lang=lisp><span style=display:flex><span>(defmacro with-logged-in (<span style=color:#66d9ef>&amp;body</span> body)
+</span></span><span style=display:flex><span>  <span style=color:#f92672>`</span>(<span style=color:#66d9ef>if</span> (logged-in-p)
+</span></span><span style=display:flex><span>       (<span style=color:#66d9ef>progn</span> <span style=color:#f92672>,@</span>body)
+</span></span><span style=display:flex><span>       (render <span style=color:#ae81ff>#p&#34;login.html&#34;</span>
+</span></span><span style=display:flex><span>               <span style=color:#f92672>&#39;</span>(<span style=color:#e6db74>:message</span> <span style=color:#e6db74>&#34;Please log-in to access this page.&#34;</span>))))</span></span></code></pre></div><p>If the user isn&rsquo;t logged in, there will be nothing stored in the session store,
+and we render the login page. When all is well, we execute the macro&rsquo;s
+body. We use it like this:</p><div class="highlight wrap-code"><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-lisp data-lang=lisp><span style=display:flex><span>(defroute <span style=color:#e6db74>&#34;/account/logout&#34;</span> ()
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>&#34;Show the log-out page, only if the user is logged in.&#34;</span>
+</span></span><span style=display:flex><span>  (with-logged-in
+</span></span><span style=display:flex><span>    (logout)
+</span></span><span style=display:flex><span>    (render <span style=color:#ae81ff>#p&#34;logout.html&#34;</span>)))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>(defroute (<span style=color:#e6db74>&#34;/account/review&#34;</span> <span style=color:#e6db74>:method</span> <span style=color:#e6db74>:get</span>) ()
+</span></span><span style=display:flex><span>  (with-logged-in
+</span></span><span style=display:flex><span>    (render <span style=color:#ae81ff>#p&#34;review.html&#34;</span>
+</span></span><span style=display:flex><span>            (<span style=color:#a6e22e>list</span> <span style=color:#e6db74>:review</span> (get-review (<span style=color:#a6e22e>gethash</span> <span style=color:#e6db74>:user</span> *session*))))))</span></span></code></pre></div><p>and so on.</p><footer class=footline><hr><footer style=text-align:right;font-size:.8rem><div>A motivated Lisper, 2022-present. <a href=https://github.com/sponsors/vindarel/>Show your love!</a> ♥</div><div><a href="https://www.udemy.com/course/common-lisp-programming/?referralCode=2F3D698BBC4326F94358">Learn Common Lisp efficiently in videos</a> 🎥</div></footer></footer></article></div></main></div><aside id=R-sidebar class=default-animation><div id=R-header-topbar class=default-animation></div><div id=R-header-wrapper class=default-animation><div id=R-header class=default-animation><style>#logo svg,#logo svg *{color:#282828;color:var(--MENU-SECTIONS-BG-color);fill:#282828!important;fill:var(--MENU-SECTIONS-BG-color)!important;opacity:.945}a#logo{color:#282828;color:var(--MENU-SECTIONS-BG-color);font-family:work sans,helvetica,tahoma,geneva,arial,sans-serif;font-size:30px;font-weight:300;margin-top:-13px;max-width:60%;text-transform:uppercase;width:226px;white-space:nowrap}a#logo:hover{color:#282828;color:var(--MENU-SECTIONS-BG-color)}#logo svg{margin-bottom:-20px;margin-left:-23.5px;width:40.5%}@media only all and (max-width:59.938em){a#logo{font-size:25px;margin-top:-3px}#logo svg{margin-bottom:-12px;margin-left:-23px}}@media all and (-ms-high-contrast:none){a#logo{margin-top:-58px}#logo svg{margin-bottom:-62px}}</style><a id=logo href=/>🚀</a></div><script>window.index_js_url="/searchindex.js?1736278160"</script><search><form action=/search/index.html method=get><div class="searchbox default-animation"><button class=search-detail type=submit title="Search (CTRL+ALT+f)"><i class="fas fa-search"></i></button>
+<label class=a11y-only for=R-search-by>Search</label>
+<input data-search-input id=R-search-by name=search-by class=search-by type=search placeholder=Search...>
+<button class=search-clear type=button data-search-clear title="Clear search"><i class="fas fa-times" title="Clear search"></i></button></div></form></search><script>var contentLangs=["en"]</script><script src=/js/auto-complete.js?1736278160 defer></script><script src=/js/lunr/lunr.min.js?1736278160 defer></script><script src=/js/lunr/lunr.stemmer.support.min.js?1736278160 defer></script><script src=/js/lunr/lunr.multi.min.js?1736278160 defer></script><script src=/js/lunr/lunr.en.min.js?1736278160 defer></script><script src=/js/search.js?1736278160 defer></script></div><div id=R-homelinks class="default-animation homelinks"><ul><li><a class=padding href=/index.html><i class="fa-fw fas fa-home"></i> Home</a></li></ul><hr class=padding></div><div id=R-content-wrapper class=highlightable><div id=R-topics><ul class="enlarge morespace collapsible-menu"><li data-nav-id=/tutorial/index.html><input type=checkbox id=R-section-5816d3986a56e91688f1baee8cddaed6 aria-controls=R-subsections-5816d3986a56e91688f1baee8cddaed6><label for=R-section-5816d3986a56e91688f1baee8cddaed6><i class="fa-fw fas fa-chevron-down"></i><i class="fa-fw fas fa-chevron-right"></i><span class=a11y-only>Submenu Tutorial part 1</span></label><a class=padding href=/tutorial/index.html>Tutorial part 1</a><ul id=R-subsections-5816d3986a56e91688f1baee8cddaed6 class=collapsible-menu><li data-nav-id=/tutorial/getting-started/index.html><a class=padding href=/tutorial/getting-started/index.html>Getting Started</a></li><li data-nav-id=/tutorial/first-route/index.html><a class=padding href=/tutorial/first-route/index.html>the first route</a></li><li data-nav-id=/tutorial/first-template/index.html><a class=padding href=/tutorial/first-template/index.html>the first template</a></li><li data-nav-id=/tutorial/first-path-parameter/index.html><a class=padding href=/tutorial/first-path-parameter/index.html>the first path parameter</a></li><li data-nav-id=/tutorial/first-url-parameters/index.html><a class=padding href=/tutorial/first-url-parameters/index.html>the first URL parameter</a></li><li data-nav-id=/tutorial/first-form/index.html><a class=padding href=/tutorial/first-form/index.html>the first form</a></li><li data-nav-id=/tutorial/first-bonus-css/index.html><a class=padding href=/tutorial/first-bonus-css/index.html>Bonus: pimp your CSS</a></li><li data-nav-id=/tutorial/first-build/index.html><a class=padding href=/tutorial/first-build/index.html>the first build</a></li></ul></li><li class=parent data-nav-id=/building-blocks/index.html><input type=checkbox id=R-section-677e78e4818ce1699969152db5d5854b aria-controls=R-subsections-677e78e4818ce1699969152db5d5854b checked><label for=R-section-677e78e4818ce1699969152db5d5854b><i class="fa-fw fas fa-chevron-down"></i><i class="fa-fw fas fa-chevron-right"></i><span class=a11y-only>Submenu Building blocks</span></label><a class=padding href=/building-blocks/index.html>Building blocks</a><ul id=R-subsections-677e78e4818ce1699969152db5d5854b class=collapsible-menu><li data-nav-id=/building-blocks/simple-web-server/index.html><a class=padding href=/building-blocks/simple-web-server/index.html>Simple web server</a></li><li data-nav-id=/building-blocks/static/index.html><a class=padding href=/building-blocks/static/index.html>Static assets</a></li><li data-nav-id=/building-blocks/routing/index.html><a class=padding href=/building-blocks/routing/index.html>Routes and URL parameters</a></li><li data-nav-id=/building-blocks/templates/index.html><a class=padding href=/building-blocks/templates/index.html>Templates</a></li><li data-nav-id=/building-blocks/session/index.html><a class=padding href=/building-blocks/session/index.html>Sessions</a></li><li data-nav-id=/building-blocks/headers/index.html><a class=padding href=/building-blocks/headers/index.html>Headers</a></li><li data-nav-id=/building-blocks/errors-interactivity/index.html><a class=padding href=/building-blocks/errors-interactivity/index.html>Errors and interactivity</a></li><li data-nav-id=/building-blocks/database/index.html><a class=padding href=/building-blocks/database/index.html>Connecting to a database</a></li><li class=active data-nav-id=/building-blocks/user-log-in/index.html><a class=padding href=/building-blocks/user-log-in/index.html>User log-in</a></li><li data-nav-id=/building-blocks/users-and-passwords/index.html><a class=padding href=/building-blocks/users-and-passwords/index.html>Users and passwords</a></li><li data-nav-id=/building-blocks/form-validation/index.html><a class=padding href=/building-blocks/form-validation/index.html>Form validation</a></li><li data-nav-id=/building-blocks/building-binaries/index.html><a class=padding href=/building-blocks/building-binaries/index.html>Running and Building</a></li><li data-nav-id=/building-blocks/deployment/index.html><a class=padding href=/building-blocks/deployment/index.html>Deployment</a></li><li data-nav-id=/building-blocks/remote-debugging/index.html><a class=padding href=/building-blocks/remote-debugging/index.html>Remote debugging</a></li><li data-nav-id=/building-blocks/electron/index.html><a class=padding href=/building-blocks/electron/index.html>Electron</a></li><li data-nav-id=/building-blocks/web-views/index.html><a class=padding href=/building-blocks/web-views/index.html>Web views: cross-platform GUIs</a></li></ul></li><li data-nav-id=/isomorphic-web-frameworks/index.html><input type=checkbox id=R-section-652e7241431d27ef0fbd324cbff58c2a aria-controls=R-subsections-652e7241431d27ef0fbd324cbff58c2a><label for=R-section-652e7241431d27ef0fbd324cbff58c2a><i class="fa-fw fas fa-chevron-down"></i><i class="fa-fw fas fa-chevron-right"></i><span class=a11y-only>Submenu Isomorphic web frameworks</span></label><a class=padding href=/isomorphic-web-frameworks/index.html>Isomorphic web frameworks</a><ul id=R-subsections-652e7241431d27ef0fbd324cbff58c2a class=collapsible-menu><li data-nav-id=/isomorphic-web-frameworks/weblocks/index.html><a class=padding href=/isomorphic-web-frameworks/weblocks/index.html>Weblocks: solving the JavaScript Problem©</a></li></ul></li><li data-nav-id=/see-also/index.html><a class=padding href=/see-also/index.html>See also</a></li></ul></div><div class="padding footermargin footerLangSwitch footerVariantSwitch footerVisitedLinks footerFooter showFooter"></div><div id=R-menu-footer><hr class="padding default-animation footerLangSwitch footerVariantSwitch footerVisitedLinks footerFooter showFooter"><div id=R-prefooter class="footerLangSwitch footerVariantSwitch footerVisitedLinks"><ul><li id=R-select-language-container class=footerLangSwitch><div class="padding menu-control"><i class="fa-fw fas fa-language"></i>
+<span>&nbsp;</span><div class=control-style><label class=a11y-only for=R-select-language>Language</label>
+<select id=R-select-language onchange="location=this.querySelector(this.value).dataset.url"><option id=R-select-language-en value=#R-select-language-en data-url=/building-blocks/user-log-in/index.html lang=en-us selected></option></select></div><div class=clear></div></div></li><li id=R-select-variant-container class=footerVariantSwitch><div class="padding menu-control"><i class="fa-fw fas fa-paint-brush"></i>
+<span>&nbsp;</span><div class=control-style><label class=a11y-only for=R-select-variant>Theme</label>
+<select id=R-select-variant onchange=window.variants&&variants.changeVariant(this.value)><option id=R-select-variant-auto value=auto selected>Auto</option></select></div><div class=clear></div></div><script>window.variants&&variants.markSelectedVariant()</script></li><li class=footerVisitedLinks><div class="padding menu-control"><i class="fa-fw fas fa-history"></i>
+<span>&nbsp;</span><div class=control-style><button onclick=clearHistory()>Clear History</button></div><div class=clear></div></div></li></ul></div><div id=R-footer class="footerFooter showFooter"><p>Built with <a href=https://github.com/McShelby/hugo-theme-relearn title=love><i class="fas fa-heart"></i></a> by <a href=https://gohugo.io/>Hugo</a></p></div></div></div></aside><script src=/js/clipboard.min.js?1736278160 defer></script><script src=/js/perfect-scrollbar.min.js?1736278160 defer></script><script src=/js/theme.js?1736278160 defer></script></body></html>

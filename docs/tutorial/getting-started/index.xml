@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Getting Started :: Web Apps in Lisp: Know-how</title><link>http://example.org/tutorial/getting-started/index.html</link><description>In this application we will:
+define a list of products, stored in a dummy database, we’ll have an index page with a search form, we’ll display search results, and have one page per product to see it in details. But everything starts with a project (a system in Lisp parlance) definition.
+Setting up the project Let’s create a regular Common Lisp project.
+We could start straihgt from the REPL, but we’ll need a project definition to save our project dependencies, and other metadata. Such a project is an ASDF file.</description><generator>Hugo</generator><language>en-us</language><atom:link href="http://example.org/tutorial/getting-started/index.xml" rel="self" type="application/rss+xml"/></channel></rss>

@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.136.0">
+    <meta name="generator" content="Relearn 7.0.1+72a875f1db967152c77914cff4d53f8fcee0e619">
+    <meta name="description" content="So far we have 1 route that displays all our products.
+We will make each product line clickable, to open a new page, that will show more details.
+Each product detail will be available on the URL /product/n where n is the product ID.
+Add links To begin with, let’s add links to the list of products:
+(defparameter *template-root* &#34; &lt;title&gt; Lisp web app &lt;/title&gt; &lt;body&gt; &lt;ul&gt; {% for product in products %} &lt;li&gt; &lt;a href=\&#34;/product/{{ product.0 }}\&#34;&gt;{{ product.1 }} - {{ product.2 }}&lt;/a&gt; &lt;/li&gt; {% endfor %} &lt;/ul&gt; &lt;/body&gt; &#34;) Carefully observe that, in the href, we had to escape the quotes :/ This is the shortcoming of defining Djula templates as strings in .lisp files. It’s best to move them to their own directory and own files.">
+    <meta name="author" content="vindarel">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Part 1: the first URL parameter :: WALK book">
+    <meta name="twitter:description" content="So far we have 1 route that displays all our products.
+We will make each product line clickable, to open a new page, that will show more details.
+Each product detail will be available on the URL /product/n where n is the product ID.
+Add links To begin with, let’s add links to the list of products:
+(defparameter *template-root* &#34; &lt;title&gt; Lisp web app &lt;/title&gt; &lt;body&gt; &lt;ul&gt; {% for product in products %} &lt;li&gt; &lt;a href=\&#34;/product/{{ product.0 }}\&#34;&gt;{{ product.1 }} - {{ product.2 }}&lt;/a&gt; &lt;/li&gt; {% endfor %} &lt;/ul&gt; &lt;/body&gt; &#34;) Carefully observe that, in the href, we had to escape the quotes :/ This is the shortcoming of defining Djula templates as strings in .lisp files. It’s best to move them to their own directory and own files.">
+    <meta property="og:url" content="http://localhost:1313/tutorial/first-url-parameter/index.html">
+    <meta property="og:site_name" content="WALK book">
+    <meta property="og:title" content="Part 1: the first URL parameter :: WALK book">
+    <meta property="og:description" content="So far we have 1 route that displays all our products.
+We will make each product line clickable, to open a new page, that will show more details.
+Each product detail will be available on the URL /product/n where n is the product ID.
+Add links To begin with, let’s add links to the list of products:
+(defparameter *template-root* &#34; &lt;title&gt; Lisp web app &lt;/title&gt; &lt;body&gt; &lt;ul&gt; {% for product in products %} &lt;li&gt; &lt;a href=\&#34;/product/{{ product.0 }}\&#34;&gt;{{ product.1 }} - {{ product.2 }}&lt;/a&gt; &lt;/li&gt; {% endfor %} &lt;/ul&gt; &lt;/body&gt; &#34;) Carefully observe that, in the href, we had to escape the quotes :/ This is the shortcoming of defining Djula templates as strings in .lisp files. It’s best to move them to their own directory and own files.">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="Tutorial part 1">
+    <meta itemprop="name" content="Part 1: the first URL parameter :: WALK book">
+    <meta itemprop="description" content="So far we have 1 route that displays all our products.
+We will make each product line clickable, to open a new page, that will show more details.
+Each product detail will be available on the URL /product/n where n is the product ID.
+Add links To begin with, let’s add links to the list of products:
+(defparameter *template-root* &#34; &lt;title&gt; Lisp web app &lt;/title&gt; &lt;body&gt; &lt;ul&gt; {% for product in products %} &lt;li&gt; &lt;a href=\&#34;/product/{{ product.0 }}\&#34;&gt;{{ product.1 }} - {{ product.2 }}&lt;/a&gt; &lt;/li&gt; {% endfor %} &lt;/ul&gt; &lt;/body&gt; &#34;) Carefully observe that, in the href, we had to escape the quotes :/ This is the shortcoming of defining Djula templates as strings in .lisp files. It’s best to move them to their own directory and own files.">
+    <meta itemprop="wordCount" content="645">
+    <title>Part 1: the first URL parameter :: WALK book</title>
+    <link href="/tutorial/first-url-parameter/index.xml" rel="alternate" type="application/rss+xml" title="Part 1: the first URL parameter :: WALK book">
+    <link href="/css/fontawesome-all.min.css?1735861939" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/css/fontawesome-all.min.css?1735861939" rel="stylesheet"></noscript>
+    <link href="/css/nucleus.css?1735861939" rel="stylesheet">
+    <link href="/css/auto-complete.css?1735861939" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/css/auto-complete.css?1735861939" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar.min.css?1735861939" rel="stylesheet">
+    <link href="/css/fonts.css?1735861939" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/css/fonts.css?1735861939" rel="stylesheet"></noscript>
+    <link href="/css/theme.css?1735861939" rel="stylesheet">
+    <link href="/css/theme-auto.css?1735861939" rel="stylesheet" id="R-variant-style">
+    <link href="/css/chroma-auto.css?1735861939" rel="stylesheet" id="R-variant-chroma-style">
+    <link href="/css/print.css?1735861939" rel="stylesheet" media="print">
+    <script src="/js/variant.js?1735861939"></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.relBasePath='..\/..';
+      window.relearn.relBaseUri='..\/..';
+      window.relearn.absBaseUri='http:\/\/localhost:1313';
+      window.relearn.disableAnchorCopy=false;
+      window.relearn.disableAnchorScrolling=false;
+      // variant stuff
+      window.variants && variants.init( [ 'auto' ] );
+      // translations
+      window.T_Copy_to_clipboard = `Copy to clipboard`;
+      window.T_Copied_to_clipboard = `Copied to clipboard!`;
+      window.T_Copy_link_to_clipboard = `Copy link to clipboard`;
+      window.T_Link_copied_to_clipboard = `Copied link to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+    </script>
+  </head>
+  <body class="mobile-support html" data-url="/tutorial/first-url-parameter/index.html">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar">
+        <div class="topbar-wrapper">
+          <div class="topbar-sidebar-divider"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide"><button class="topbar-control" onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button>
+            </div>
+            <div class="topbar-button topbar-button-toc" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show"><button class="topbar-control" onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-list-alt"></i></button>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
+  <ul>
+    <li><a href="#add-links">Add links</a></li>
+    <li><a href="#path-parameter">Path parameter</a></li>
+    <li><a href="#show-a-product-page">Show a product page</a></li>
+    <li><a href="#small-refactor">Small refactor</a></li>
+  </ul>
+</nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li
+            itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement"><a itemprop="item" href="/tutorial/index.html"><span itemprop="name">Tutorial part 1</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li><li
+            itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement"><span itemprop="name">Part 1: the first URL parameter</span><meta itemprop="position" content="2"></li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-prev" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show"><a class="topbar-control" href="/tutorial/first-template/index.html" title="Part 1: the first template (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a>
+            </div>
+            <div class="topbar-button topbar-button-next" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show"><a class="topbar-control" href="/building-blocks/index.html" title="Building blocks (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a>
+            </div>
+            <div class="topbar-button topbar-button-more" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show"><button class="topbar-control" onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable tutorial" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
+
+<h1 id="part-1-the-first-url-parameter">Part 1: the first URL parameter</h1>
+
+<p>So far we have 1 route that displays all our products.</p>
+<p>We will make each product line clickable, to open a new page, that will show more details.</p>
+<p>Each product detail will be available on the URL <code>/product/n</code> where <code>n</code> is the product ID.</p>
+<h2 id="add-links">Add links</h2>
+<p>To begin with, let&rsquo;s add links to the list of products:</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lisp" data-lang="lisp"><span style="display:flex;"><span>(defparameter *template-root* <span style="color:#e6db74">&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&lt;title&gt; Lisp web app &lt;/title&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&lt;body&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  &lt;ul&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  {% for product in products %}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &lt;li&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      &lt;a href=\&#34;/product/{{ product.0 }}\&#34;&gt;{{ product.1 }} - {{ product.2 }}&lt;/a&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &lt;/li&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  {% endfor %}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> &lt;/ul&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&lt;/body&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;</span>)</span></span></code></pre></div>
+<p>Carefully observe that, in the <code>href</code>, we had to escape the quotes :/
+This is the shortcoming of defining Djula templates as strings in
+.lisp files. It&rsquo;s best to move them to their own directory and own
+files.</p>
+<p>However now that you copy-pasted, re-compile the variable, refresh the
+page, and click on a link: you should get a &ldquo;Not Found&rdquo; error.</p>
+<p>We need to create a new route to handle the <code>/products/n</code> URL.</p>
+<h2 id="path-parameter">Path parameter</h2>
+<p>The <code>n</code> is a path parameter. It is handled by easy-routes with this syntax:</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lisp" data-lang="lisp"><span style="display:flex;"><span>(easy-routes:defroute product-route (<span style="color:#e6db74">&#34;/product/:n&#34;</span>) ()
+</span></span><span style="display:flex;"><span>  (<span style="color:#a6e22e">format</span> <span style="color:#66d9ef">nil</span> <span style="color:#e6db74">&#34;parameter is: ~a&#34;</span> n))</span></span></code></pre></div>
+<p>Go again to <a href="http://localhost:8899/product/0" rel="external" target="_blank">http://localhost:8899/product/0</a> and you should see:</p>
+<pre><code>parameter is: 0
+</code></pre>
+<p>Perfect.</p>
+<p>Inside our route, <code>n</code> is a string. Let&rsquo;s proove it:</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lisp" data-lang="lisp"><span style="display:flex;"><span>(easy-routes:defroute product-route (<span style="color:#e6db74">&#34;/product/:n&#34;</span>) ()
+</span></span><span style="display:flex;"><span>  (<span style="color:#a6e22e">format</span> <span style="color:#66d9ef">nil</span> <span style="color:#e6db74">&#34;parameter is: ~a and is of type: ~a&#34;</span> n (<span style="color:#a6e22e">type-of</span> n)))</span></span></code></pre></div>
+<p>you should see &ldquo;parameter is: 0 and is of type: (SIMPLE-ARRAY
+CHARACTER (1))&rdquo;, and an array of characters is a string.</p>
+<p>We can parse a string to an integer with <code>parse-integer</code>, but look,
+Hunchentoot, and by extension easy-routes, have shortcuts where we can
+specify the type of each path or URL parameter. The parsing is done by
+them. Let&rsquo;s try:</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lisp" data-lang="lisp"><span style="display:flex;"><span>(easy-routes:defroute product-route (<span style="color:#e6db74">&#34;/product/:n&#34;</span>) (&amp;path (n <span style="color:#e6db74">&#39;integer</span>))
+</span></span><span style="display:flex;"><span>  (<span style="color:#a6e22e">format</span> <span style="color:#66d9ef">nil</span> <span style="color:#e6db74">&#34;parameter is: ~a and is of type: ~a&#34;</span> n (<span style="color:#a6e22e">type-of</span> n)))</span></span></code></pre></div>
+<p>look at <code>(&amp;path (n 'integer))</code>. When I reload the page, I learn that
+the <code>type-of</code> 0 and 1 is <code>BIT</code>, and that of 3 is <code>(INTEGER 0 4611686018427387903)</code>.</p>
+<p>If I visit the page with the wrong parameter &ldquo;foo&rdquo;: <a href="http://localhost:8899/product/foo" rel="external" target="_blank">http://localhost:8899/product/foo</a>, we get <code>n</code> as NIL. Alright.</p>
+<p>With that information, let&rsquo;s return a product&rsquo;s details.</p>
+<h2 id="show-a-product-page">Show a product page</h2>
+<p>So what do we need to show a product page?</p>
+<ul>
+<li>a route for the product URL (OK)</li>
+<li>the product ID (OK)</li>
+<li>a template for the product</li>
+<li>get a product object from its ID (you would typically query the database here, but we won&rsquo;t)</li>
+<li>rendering the template with a given product.</li>
+</ul>
+<p>Look, we are not doing any error handling and I&rsquo;m not going to invent
+requirements for this app. Let&rsquo;s get to the simplest functions! Real
+use cases will come in time.</p>
+<p>Can you come up with a template and the route?</p>
+<p>Here are mine:</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lisp" data-lang="lisp"><span style="display:flex;"><span>(defparameter *template-product* <span style="color:#e6db74">&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&lt;body&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     {{ product }}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&lt;/body&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>(defun get-product (n)
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">;; Query the DB.</span>
+</span></span><span style="display:flex;"><span>  (<span style="color:#a6e22e">list</span> n (<span style="color:#a6e22e">format</span> <span style="color:#66d9ef">nil</span> <span style="color:#e6db74">&#34;Product nb ~a&#34;</span> n) <span style="color:#ae81ff">9.99</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>(defun render-product (n)
+</span></span><span style="display:flex;"><span>  (djula:render-template*
+</span></span><span style="display:flex;"><span>   (djula:compile-string *template-product*)
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">nil</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#e6db74">:product</span> (get-product n)))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>(easy-routes:defroute product-route (<span style="color:#e6db74">&#34;/product/:n&#34;</span>) (&amp;path (n <span style="color:#e6db74">&#39;integer</span>))
+</span></span><span style="display:flex;"><span>  (render-product n))</span></span></code></pre></div>
+<p>yeah I&rsquo;m just printing the product, as a list, very simply.</p>
+<p>However I don&rsquo;t like the copy-pasting between <code>render-product</code> and <code>render-products</code> so I&rsquo;ll fix it. Can you too?</p>
+<h2 id="small-refactor">Small refactor</h2>
+<p>I came up with one single <code>render</code> function that takes a template as
+parameter, and as many key arguments as needed, that it passes to
+<code>djula:render-template*</code>.</p>
+<p>I also added a <code>get-product (n)</code> function helper. This is the function
+that is supposed to hit the database.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lisp" data-lang="lisp"><span style="display:flex;"><span>(defun render (template <span style="color:#66d9ef">&amp;rest</span> args)
+</span></span><span style="display:flex;"><span>  (<span style="color:#a6e22e">apply</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#a6e22e">#&#39;</span>djula:render-template*
+</span></span><span style="display:flex;"><span>   (djula:compile-string template)
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">nil</span>
+</span></span><span style="display:flex;"><span>   args))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>(easy-routes:defroute root (<span style="color:#e6db74">&#34;/&#34;</span>) ()
+</span></span><span style="display:flex;"><span>  (render *template-root* <span style="color:#e6db74">:products</span> (products)))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>(easy-routes:defroute product-route (<span style="color:#e6db74">&#34;/product/:n&#34;</span>) (&amp;path (n <span style="color:#e6db74">&#39;integer</span>))
+</span></span><span style="display:flex;"><span>  (render *template-product* <span style="color:#e6db74">:product</span> (get-product n)))</span></span></code></pre></div>
+<p>That&rsquo;s better. Usually all my routes have this form: name, arguments,
+call to some sort of render function with a template and arguments.</p>
+<p>I&rsquo;d like to carry on with features but let&rsquo;s have a word about <em>URL parameters</em>.</p>
+
+  <footer class="footline">
+
+
+            <hr/>
+            <footer style="text-align: right; font-size: .8rem">
+              <div> A motivated Lisper, 2022-2024. <a href="https://github.com/sponsors/vindarel/">Show your love!</a> ♥
+              </div>
+
+              <div> <a href="https://www.udemy.com/course/common-lisp-programming/?referralCode=2F3D698BBC4326F94358">Learn Common Lisp efficiently</a> </div>
+
+
+            </footer>
+
+  </footer>
+</article>
+        </div>
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation">
+        <div id="R-header" class="default-animation">
+          <style>
+            #logo svg,
+            #logo svg * {
+              color: #282828;
+              color: var(--MENU-SECTIONS-BG-color);
+              fill: #282828 !important;
+              fill: var(--MENU-SECTIONS-BG-color) !important;
+              opacity: .945;
+            }
+            a#logo {
+              color: #282828;
+              color: var(--MENU-SECTIONS-BG-color);
+              font-family: 'Work Sans', 'Helvetica', 'Tahoma', 'Geneva', 'Arial', sans-serif;
+              font-size: 30px;
+              font-weight: 300;
+              margin-top: -13px;
+              max-width: 60%;
+              text-transform: uppercase;
+              width: 226px;
+              white-space: nowrap;
+            }
+            a#logo:hover {
+              color: #282828;
+              color: var(--MENU-SECTIONS-BG-color);
+            }
+            #logo svg {
+              margin-bottom: -20px;
+              margin-left: -23.5px;
+              width: 40.5%;
+            }
+            @media only all and (max-width: 59.938em) {
+              a#logo {
+                font-size: 25px;
+                margin-top: -3px;
+              }
+              #logo svg {
+                margin-bottom: -12px;
+                margin-left: -23px;
+              }
+            }
+            @media all and (-ms-high-contrast:none) {
+              /* IE11s understanding of positioning is weird at best */
+              a#logo {
+                margin-top: -58px;
+              }
+              #logo svg {
+                margin-bottom: -62px;
+              }
+            }
+          </style>
+          <a id="logo" href="/">
+
+
+            🚀
+          </a>
+
+        </div>
+        <script>
+          window.index_js_url="/searchindex.js?1735861939";
+        </script>
+        <search><form action="/search/index.html" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
+        <script>
+          var contentLangs=['en'];
+        </script>
+        <script src="/js/auto-complete.js?1735861939" defer></script>
+        <script src="/js/lunr/lunr.min.js?1735861939" defer></script>
+        <script src="/js/lunr/lunr.stemmer.support.min.js?1735861939" defer></script>
+        <script src="/js/lunr/lunr.multi.min.js?1735861939" defer></script>
+        <script src="/js/lunr/lunr.en.min.js?1735861939" defer></script>
+        <script src="/js/search.js?1735861939" defer></script>
+      </div>
+      <div id="R-homelinks" class="default-animation homelinks">
+        <ul>
+          <li><a class="padding" href="/index.html"><i class="fa-fw fas fa-home"></i> Home</a></li>
+        </ul>
+        <hr class="padding">
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div id="R-topics">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="parent " data-nav-id="/tutorial/index.html"><input type="checkbox" id="R-section-5816d3986a56e91688f1baee8cddaed6" aria-controls="R-subsections-5816d3986a56e91688f1baee8cddaed6" checked><label for="R-section-5816d3986a56e91688f1baee8cddaed6"><i class="fa-fw fas fa-chevron-down"></i><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Tutorial part 1</span></label><a class="padding" href="/tutorial/index.html">Tutorial part 1</a><ul id="R-subsections-5816d3986a56e91688f1baee8cddaed6" class="collapsible-menu">
+            <li class="" data-nav-id="/tutorial/getting-started/index.html"><a class="padding" href="/tutorial/getting-started/index.html">Part 1: Getting Started</a></li>
+            <li class="" data-nav-id="/tutorial/first-route/index.html"><a class="padding" href="/tutorial/first-route/index.html">Part 1: the first route</a></li>
+            <li class="" data-nav-id="/tutorial/first-template/index.html"><a class="padding" href="/tutorial/first-template/index.html">Part 1: the first template</a></li>
+            <li class="active " data-nav-id="/tutorial/first-url-parameter/index.html"><a class="padding" href="/tutorial/first-url-parameter/index.html">Part 1: the first URL parameter</a></li></ul></li>
+            <li class="" data-nav-id="/building-blocks/index.html"><input type="checkbox" id="R-section-677e78e4818ce1699969152db5d5854b" aria-controls="R-subsections-677e78e4818ce1699969152db5d5854b"><label for="R-section-677e78e4818ce1699969152db5d5854b"><i class="fa-fw fas fa-chevron-down"></i><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Building blocks</span></label><a class="padding" href="/building-blocks/index.html">Building blocks</a><ul id="R-subsections-677e78e4818ce1699969152db5d5854b" class="collapsible-menu">
+            <li class="" data-nav-id="/building-blocks/simple-web-server/index.html"><a class="padding" href="/building-blocks/simple-web-server/index.html">Simple web server</a></li>
+            <li class="" data-nav-id="/building-blocks/routing/index.html"><a class="padding" href="/building-blocks/routing/index.html">Routing</a></li>
+            <li class="" data-nav-id="/building-blocks/static/index.html"><a class="padding" href="/building-blocks/static/index.html">Static assets</a></li>
+            <li class="" data-nav-id="/building-blocks/templates/index.html"><a class="padding" href="/building-blocks/templates/index.html">Templates</a></li>
+            <li class="" data-nav-id="/building-blocks/error-handling/index.html"><a class="padding" href="/building-blocks/error-handling/index.html">Error handling</a></li>
+            <li class="" data-nav-id="/building-blocks/database/index.html"><a class="padding" href="/building-blocks/database/index.html">Connecting to a database</a></li>
+            <li class="" data-nav-id="/building-blocks/deployment/index.html"><a class="padding" href="/building-blocks/deployment/index.html">Deployment</a></li></ul></li>
+            <li class="" data-nav-id="/building/index.html"><a class="padding" href="/building/index.html">Building a binary</a></li>
+            <li class="" data-nav-id="/database/index.html"><a class="padding" href="/database/index.html">Connecting to a database</a></li>
+            <li class="" data-nav-id="/headers/index.html"><a class="padding" href="/headers/index.html">Headers</a></li>
+            <li class="" data-nav-id="/isomorphic-web-frameworks/index.html"><input type="checkbox" id="R-section-652e7241431d27ef0fbd324cbff58c2a" aria-controls="R-subsections-652e7241431d27ef0fbd324cbff58c2a"><label for="R-section-652e7241431d27ef0fbd324cbff58c2a"><i class="fa-fw fas fa-chevron-down"></i><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Isomorphic web frameworks</span></label><a class="padding" href="/isomorphic-web-frameworks/index.html">Isomorphic web frameworks</a><ul id="R-subsections-652e7241431d27ef0fbd324cbff58c2a" class="collapsible-menu">
+            <li class="" data-nav-id="/isomorphic-web-frameworks/weblocks/index.html"><a class="padding" href="/isomorphic-web-frameworks/weblocks/index.html">Weblocks: solving the JavaScript Problem©</a></li></ul></li>
+            <li class="" data-nav-id="/see-also/index.html"><a class="padding" href="/see-also/index.html">See also</a></li>
+          </ul>
+        </div>
+        <div class="padding footermargin footerLangSwitch footerVariantSwitch footerVisitedLinks footerFooter showFooter"></div>
+        <div id="R-menu-footer">
+          <hr class="padding default-animation footerLangSwitch footerVariantSwitch footerVisitedLinks footerFooter showFooter">
+          <div id="R-prefooter" class="footerLangSwitch footerVariantSwitch footerVisitedLinks">
+            <ul>
+              <li id="R-select-language-container" class="footerLangSwitch">
+                <div class="padding menu-control">
+                  <i class="fa-fw fas fa-language"></i>
+                  <span>&nbsp;</span>
+                  <div class="control-style">
+                    <label class="a11y-only" for="R-select-language">Language</label>
+                    <select id="R-select-language" onchange="location = this.querySelector( this.value ).dataset.url;">
+                      <option id="R-select-language-en" value="#R-select-language-en" data-url="/tutorial/first-url-parameter/index.html" lang="en-us" selected></option>
+                    </select>
+                  </div>
+                  <div class="clear"></div>
+                </div>
+              </li>
+              <li id="R-select-variant-container" class="footerVariantSwitch">
+                <div class="padding menu-control">
+                  <i class="fa-fw fas fa-paint-brush"></i>
+                  <span>&nbsp;</span>
+                  <div class="control-style">
+                    <label class="a11y-only" for="R-select-variant">Theme</label>
+                    <select id="R-select-variant" onchange="window.variants && variants.changeVariant( this.value );">
+                      <option id="R-select-variant-auto" value="auto" selected>Auto</option>
+                    </select>
+                  </div>
+                  <div class="clear"></div>
+                </div>
+                <script>window.variants && variants.markSelectedVariant();</script>
+              </li>
+              <li class="footerVisitedLinks">
+                <div class="padding menu-control">
+                  <i class="fa-fw fas fa-history"></i>
+                  <span>&nbsp;</span>
+                  <div class="control-style">
+                    <button onclick="clearHistory();">Clear History</button>
+                  </div>
+                  <div class="clear"></div>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div id="R-footer" class="footerFooter showFooter">
+        <p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p>
+          </div>
+        </div>
+      </div>
+    </aside>
+    <script src="/js/clipboard.min.js?1735861939" defer></script>
+    <script src="/js/perfect-scrollbar.min.js?1735861939" defer></script>
+    <script src="/js/theme.js?1735861939" defer></script>
+  </body>
+</html>

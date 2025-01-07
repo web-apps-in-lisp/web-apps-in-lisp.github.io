@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Connecting to a database :: WALK book</title>
+    <link>http://localhost:1313/database/index.html</link>
+    <description>Please see the databases section. The Mito ORM supports SQLite3, PostgreSQL, MySQL, it has migrations and db schema versioning, etc.&#xA;Checking a user is logged-in A framework will provide a way to work with sessions. We’ll create a little macro to wrap our routes to check if the user is logged in.&#xA;In Caveman, *session* is a hash table that represents the session’s data. Here are our login and logout functions:</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <atom:link href="http://localhost:1313/database/index.xml" rel="self" type="application/rss+xml" />
+  </channel>
+</rss>

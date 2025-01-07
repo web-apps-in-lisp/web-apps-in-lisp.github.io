@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>User log-in :: Web Apps in Lisp: Know-how</title><link>http://example.org/building-blocks/user-log-in/index.html</link><description>How do you check if a user is logged-in, and how do you do the actual log in?
+We show an example, without handling passwords yet. See the next section for passwords.
+We’ll build a simple log-in page to an admin/ private dashboard.
+What do we need to do exactly?</description><generator>Hugo</generator><language>en-us</language><atom:link href="http://example.org/building-blocks/user-log-in/index.xml" rel="self" type="application/rss+xml"/></channel></rss>

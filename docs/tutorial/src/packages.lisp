@@ -1,0 +1,2 @@
+(defpackage myproject
+  (:use :cl))

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Part 1: the first URL parameter :: WALK book</title>
+    <link>http://localhost:1313/tutorial/first-url-parameter/index.html</link>
+    <description>So far we have 1 route that displays all our products.&#xA;We will make each product line clickable, to open a new page, that will show more details.&#xA;Each product detail will be available on the URL /product/n where n is the product ID.&#xA;Add links To begin with, let’s add links to the list of products:&#xA;(defparameter *template-root* &#34; &lt;title&gt; Lisp web app &lt;/title&gt; &lt;body&gt; &lt;ul&gt; {% for product in products %} &lt;li&gt; &lt;a href=\&#34;/product/{{ product.0 }}\&#34;&gt;{{ product.1 }} - {{ product.2 }}&lt;/a&gt; &lt;/li&gt; {% endfor %} &lt;/ul&gt; &lt;/body&gt; &#34;) Carefully observe that, in the href, we had to escape the quotes :/ This is the shortcoming of defining Djula templates as strings in .lisp files. It’s best to move them to their own directory and own files.</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <atom:link href="http://localhost:1313/tutorial/first-url-parameter/index.xml" rel="self" type="application/rss+xml" />
+  </channel>
+</rss>

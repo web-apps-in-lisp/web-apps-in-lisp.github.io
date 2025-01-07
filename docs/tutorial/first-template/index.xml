@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>the first template :: Web Apps in Lisp: Know-how</title><link>http://example.org/tutorial/first-template/index.html</link><description>Our route only returns a string:
+(easy-routes:defroute root ("/") () "hello app") Can we have it return a template?
+We’ll use Djula HTML templates.
+Usually, templates go into their templates/ directory. But, we will start out by defining our first template inside our .lisp file:
+;; scr/myproject.lisp (defparameter *template-root* " &lt;title> Lisp web app &lt;/title> &lt;body> hello app &lt;/body> ") Compile this variable as you go, with C-c C-c (or call again load from any REPL).</description><generator>Hugo</generator><language>en-us</language><atom:link href="http://example.org/tutorial/first-template/index.xml" rel="self" type="application/rss+xml"/></channel></rss>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Static assets :: Web Apps in Lisp: Know-how</title><link>http://example.org/building-blocks/static/index.html</link><description>How can we serve static assets?
+Remember from simple web server how Hunchentoot serves files from a www/ directory by default. We can change that.
+Hunchentoot Use the create-folder-dispatcher-and-handler prefix directory function.
+For example:
+(defun serve-static-assets () "Let Hunchentoot serve static assets under the /src/static/ directory of your :myproject system. Then reference static assets with the /static/ URL prefix." (push (hunchentoot:create-folder-dispatcher-and-handler "/static/" (merge-pathnames "src/static" ;; starts without a / (asdf:system-source-directory :myproject))) ;; &lt;- myproject hunchentoot:*dispatch-table*)) and call it in the function that starts your application:</description><generator>Hugo</generator><language>en-us</language><atom:link href="http://example.org/building-blocks/static/index.xml" rel="self" type="application/rss+xml"/></channel></rss>

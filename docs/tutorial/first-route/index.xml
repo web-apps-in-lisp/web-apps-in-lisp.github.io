@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>the first route :: Web Apps in Lisp: Know-how</title><link>http://example.org/tutorial/first-route/index.html</link><description>It’s time we create a web app!
+Our first route Our very first route will only respond with a “hello world”.
+Let’s start with a couple variables.
+;; still in src/myproject.lisp (defvar *server* nil "Server instance (Hunchentoot acceptor).") (defparameter *port* 8899 "The application port.") Now hold yourself and let’s write our first route:
+(easy-routes:defroute root ("/") () "hello app") It only returns a string. We’ll use HTML templates in a second.</description><generator>Hugo</generator><language>en-us</language><atom:link href="http://example.org/tutorial/first-route/index.xml" rel="self" type="application/rss+xml"/></channel></rss>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Headers :: WALK book</title>
+    <link>http://localhost:1313/headers/index.html</link>
+    <description>(setf (hunchentoot:header-out &#34;HX-Trigger&#34;) &#34;myEvent&#34;)</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <atom:link href="http://localhost:1313/headers/index.xml" rel="self" type="application/rss+xml" />
+  </channel>
+</rss>

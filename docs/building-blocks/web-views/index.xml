@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Web views: cross-platform GUIs :: Web Apps in Lisp: Know-how</title><link>http://example.org/building-blocks/web-views/index.html</link><description>Web views are lightweight and cross-platform. They are nowadays a good solution to ship a GUI program to your users.
+We present two: WebUI and Webview.h, through CLOG Frame.
+Info This page appeared first on lisp-journey: three web views for Common Lisp, cross-platform GUIs.
+WebUI WebUI is a new kid in town. It is in development, it has bugs. You can view it as a wrapper around a browser window (or webview.h).</description><generator>Hugo</generator><language>en-us</language><atom:link href="http://example.org/building-blocks/web-views/index.xml" rel="self" type="application/rss+xml"/></channel></rss>

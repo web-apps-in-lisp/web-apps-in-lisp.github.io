@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Running and Building :: Web Apps in Lisp: Know-how</title><link>http://example.org/building-blocks/building-binaries/index.html</link><description>Running the application from source Info See the tutorial.
+To run our Lisp code from source, as a script, we can use the --load switch from our implementation.
+We must ensure:
+to load the project’s .asd system declaration (if any) to install the required dependencies (this demands we have installed Quicklisp previously) and to run our application’s entry point. So, the recipe to run our project from sources can look like this (you can find such a recipe in our project generator):</description><generator>Hugo</generator><language>en-us</language><atom:link href="http://example.org/building-blocks/building-binaries/index.xml" rel="self" type="application/rss+xml"/></channel></rss>
