@@ -34,24 +34,31 @@ We hope that it will be plenty useful to you.
 
 Don't hesitate to share what you're building!
 
-{{% notice info  %}}
-🎥 If you want to learn Common Lisp efficiently, with a code-driven approach, good news, [I am creating a video course](https://www.udemy.com/course/common-lisp-programming/?referralCode=2F3D698BBC4326F94358) on the Udemy platform. Learn more and get coupons [here](https://github.com/vindarel/common-lisp-course-in-videos/). I also have [Common Lisp tutorial videos on Youtube](https://www.youtube.com/@vindarel).
-{{% /notice %}}
+{{% notice info %}} 🎥 If you want to learn Common Lisp efficiently,
+with a code-driven approach, good news, [I am creating a video
+course](https://www.udemy.com/course/common-lisp-programming/?referralCode=2F3D698BBC4326F94358)
+on the Udemy platform. Already more than 7 hours of content, rated
+4.61/5 by our learners (thank you!). Learn more and get coupons
+[here](https://github.com/vindarel/common-lisp-course-in-videos/). I
+also have [Common Lisp tutorial videos on
+Youtube](https://www.youtube.com/@vindarel).  {{% /notice %}}
 
 Now let's go to [the tutorial](/tutorial/).
 
 ## How to start with Common Lisp
 
-This resources is not about learning Common Lisp the language, and we
+This resource is not about learning Common Lisp the language. We
 expect you have a working setup, with the Quicklisp package
-manager. Please have the
-[Cookbook](https://lispcookbook.github.io/cl-cookbook/) open on the side.
+manager. Please refer to the [CL
+Cookbook](https://lispcookbook.github.io/cl-cookbook/).
 
 
 ## Contact
 
-We are @vindarel on [Discord's Lisp server](https://discord.gg/hhk46CE) and Mastodon. We can use Github
-Discussions for anything CL + web related.
+We are @vindarel on [Lisp's Discord server](https://discord.gg/hhk46CE) and Mastodon.
+<!-- Our email: `(@ vindarel (dot mailz org))`. -->
+
+<!-- I am an independent developer, using Common Lisp in production© since 2020 and I am sharing my experince on [https://lisp-journey.gitlab.io/](https://lisp-journey.gitlab.io/). -->
 
 
 <!-- ## Keywords -->

@@ -11,6 +11,7 @@ that offers many features:
 
 - automatic forms
 - form validation with in-line error messages
+- CSRF protection
 - client-side validation
 - subforms
 - Djula and Spinneret renderers
