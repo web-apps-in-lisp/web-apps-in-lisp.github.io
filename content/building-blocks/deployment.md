@@ -140,9 +140,18 @@ Reload nginx (send the "reload" signal):
 and that's it: you can access your Lisp app from the outside through `http://www.your-domain-name.org`.
 
 
-## Deploying on Heroku and other services
+## Deploying on Heroku, Digital Ocean, OVH, Deploy.sh and other services
 
-See [heroku-buildpack-common-lisp](https://gitlab.com/duncan-bayne/heroku-buildpack-common-lisp) and the [Awesome CL#deploy](https://github.com/CodyReichert/awesome-cl#deployment) section for interface libraries for Kubernetes, OpenShift, AWS, etc.
+See:
+
+* [heroku-buildpack-common-lisp](https://gitlab.com/duncan-bayne/heroku-buildpack-common-lisp)
+* [Platform.sh](https://platform.sh/blog/2019/lisp/) has Common Lisp support and so has [OVH](https://docs.ovh.com/ie/en/web-paas/languages-lisp/) through their Web PaaS partnership.
+* [Heliohost](https://www.heliohost.org/) offer a free shared hosting solution for Common Lisp.
+* see the [Awesome CL list #deploy section](https://github.com/CodyReichert/awesome-cl#deployment) for more interface libraries for Kubernetes, OpenShift, AWS, etc.
+
+### Cloud Init
+
+You can take inspiration from this [Cloud Init file for SBCL](https://git.sr.ht/%7Emarcuskammer/cloudinit/tree/main/item/sbcl-nginx.yml), an init file for providers supporting the cloudinit format (DigitalOcean etc).
 
 
 ## Monitoring
@@ -153,3 +162,6 @@ threads, requests per second,…).
 
 See [cl-sentry-client](https://github.com/mmontone/cl-sentry-client/) for error reporting.
 
+## References
+
+- [https://github.com/CodyReichert/awesome-cl#deployment](https://github.com/CodyReichert/awesome-cl#deployment)

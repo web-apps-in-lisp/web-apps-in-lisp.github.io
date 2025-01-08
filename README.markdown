@@ -13,7 +13,11 @@ GitHub Pages, from the master branch, `docs/` directory (no automated GH action 
 
     make build
 
-and push.
+and push changes.
+
+Later:
+
+- https://gohugo.io/hosting-and-deployment/hosting-on-github/
 
 ## Licence
 

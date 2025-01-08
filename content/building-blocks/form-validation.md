@@ -87,7 +87,7 @@ NIL
 (funcall *validator* "foo")
 ;; =>
 NIL
-"Length of \"asdf\" is less than 10"
+"Length of \"foo\" is less than 10"
 ```
 
 ## List of validators
