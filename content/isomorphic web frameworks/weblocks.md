@@ -1,5 +1,5 @@
 +++
-title = "Weblocks: solving the JavaScript Problem©"
+title = "Weblocks"
 weight = 100
 +++
 
