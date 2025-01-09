@@ -368,6 +368,14 @@ And, as you noticed:
 This was only an introduction. As we said, CLOG is well suited for a
 wide range of applications.
 
+### Stop the app
+
+Use
+
+```lisp
+(clog:shutdown)
+```
+
 ## Full code
 
 ```lisp
@@ -487,3 +495,4 @@ wide range of applications.
 ## References
 
 - CLOG: https://rabbibotton.github.io/clog/clog-manual.html
+

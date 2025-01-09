@@ -85,4 +85,4 @@ and [Cliki](https://www.cliki.net/Web).
 [radiance]: https://github.com/Shirakumo/radiance
 [snooze]: https://github.com/joaotavora/snooze
 [cl-rest-server]: https://github.com/mmontone/cl-rest-server
-[weblocks]: https://github.com/40ants/weblocks
+[weblocks]: https://github.com/40ants/reblocks
