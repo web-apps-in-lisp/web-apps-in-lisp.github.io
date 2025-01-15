@@ -13,7 +13,6 @@ The Reblocks's demo we will build is a TODO app:
 
 ![](https://40ants.com/reblocks/images/docs/images/quickstart-check-task.gif)
 
----
 
 {{% notice note %}}
 

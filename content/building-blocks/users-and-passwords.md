@@ -55,18 +55,27 @@ Did it work? Run `SELECT * FROM users;`.
 
 ## Encrypting passwords
 
-### With cl-pass
+### With cl-bcrypt
 
-[cl-pass](https://github.com/eudoxia0/cl-pass) is a password hashing and verification library. It is as simple to use as this:
+[cl-bcrypt](https://github.com/dnaeon/cl-bcrypt) is a password hashing and verification library. It is as simple to use as this:
 
 ```lisp
-(cl-pass:hash "test")
-;; "PBKDF2$sha256:20000$5cf6ee792cdf05e1ba2b6325c41a5f10$19c7f2ccb3880716bf7cdf999b3ed99e07c7a8140bab37af2afdc28d8806e854"
-(cl-pass:check-password "test" *)
-;; t
-(cl-pass:check-password "nope" **)
-;; nil
+CL-USER> (defparameter *password*
+           (bcrypt:make-password "my-secret-password"))
+*PASSWORD*
 ```
+
+and you can specify another salt, another cost factor and another algorithm identifier.
+
+Then you can use `bcrypt:encode` to get a string reprentation of the password:
+
+~~~lisp
+CL-USER> (bcrypt:encode *password*)
+"$2a$16$ClVzMvzfNyhFA94iLDdToOVeApbDppFru3JXNUyi1y1x6MkO0KzZa"
+~~~
+
+and you decode a password with `decode`.
+
 
 ### Manually (with Ironclad)
 
