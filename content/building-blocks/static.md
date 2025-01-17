@@ -20,9 +20,9 @@ For example:
   of your :myproject system.
   Then reference static assets with the /static/ URL prefix."
   (push (hunchentoot:create-folder-dispatcher-and-handler
-         "/static/"
-         (merge-pathnames "src/static" ;; starts without a /
-                          (asdf:system-source-directory :myproject))) ;; <- myproject
+          "/static/"
+          (asdf:system-relative-pathname :myproject "src/static/"))
+          ;;                                        ^^^ starts without a /
         hunchentoot:*dispatch-table*))
 ~~~
 
@@ -33,8 +33,20 @@ and call it in the function that starts your application:
 ```
 
 Now our project's static files located under `src/static/` are served
-with the `/static/` prefix, access them like this:
+with the `/static/` prefix. Access them like this:
 
 ```html
 <img src="/static/img/banner.jpg" />
+```
+
+or
+
+```html
+<script src="/static/test.js" type="text/javascript"></script>
+```
+
+where the file `src/static/test.js` could be
+
+```js
+console.log("hello");
 ```
