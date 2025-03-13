@@ -55,7 +55,7 @@ Cookbook](https://lispcookbook.github.io/cl-cookbook/).
 
 ## Contact
 
-We are @vindarel on [Lisp's Discord server](https://discord.gg/hhk46CE) and Mastodon.
+We are @vindarel on [Lisp's Discord server](https://discord.gg/hhk46CE) and [Mastodon](https://framapiaf.org/@vindarel).
 <!-- Our email: `(@ vindarel (dot mailz org))`. -->
 
 <!-- I am an independent developer, using Common Lisp in production© since 2020 and I am sharing my experince on [https://lisp-journey.gitlab.io/](https://lisp-journey.gitlab.io/). -->
