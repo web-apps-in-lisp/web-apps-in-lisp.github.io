@@ -1,9 +1,3 @@
-
-
-;; this is from
-;; https://web-apps-in-lisp.github.io/tutorial/getting-started/index.html
-;;
-;; C-c C-k
 (asdf:defsystem "myproject"
   :version "0.1"
   :author "me"
