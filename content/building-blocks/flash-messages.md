@@ -267,3 +267,5 @@ You should see a default notification. Click the "/tryflash/" URL and
 you'll see a flash message, that is deleted after use.
 
 Refresh the page, and you won't see the flash message again.
+
+- full code: https://github.com/web-apps-in-lisp/web-apps-in-lisp.github.io/blob/master/content/building-blocks/flash-messages.lisp
