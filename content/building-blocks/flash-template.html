@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>WALK - flash messages</title>
+      <!-- Bulma Version 1-->
+      <link rel="stylesheet" href="https://unpkg.com/bulma@1.0.2/css/bulma.min.css" />
+    </head>
+
+    <body>
+      <!-- START NAV -->
+      <nav class="navbar is-white">
+        <div class="container">
+          <div class="navbar-brand">
+            <a class="navbar-item brand-text" href="#">
+              Bulma Admin
+            </a>
+            <div class="navbar-burger burger" data-target="navMenu">
+              <span></span>
+            </div>
+          </div>
+          <div id="navMenu" class="navbar-menu">
+            <div class="navbar-start">
+              <a class="navbar-item" href="#">
+                Home
+              </a>
+              <a class="navbar-item" href="#">
+                Orders
+              </a>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAV -->
+
+      <div class="container">
+        <div class="columns">
+          <div class="column is-6">
+
+            <h3 class="title is-4"> Flash messages. </h3>
+
+            <div> Click <a href="/tryflash/">/tryflash/</a> to access an URL that creates a flash message and redirects you here.</div>
+
+            {% for flash in flashes %}
+
+            <div class="notification {{ flash.first }}">
+              <button class="delete"></button>
+            {{ flash.rest }}
+            </div>
+
+            {% endfor %}
+
+          </div>
+        </div>
+      </div>
+
+    </body>
+
+    <script>
+      // JS snippet to click the delete button of the notifications.
+      // see https://bulma.io/documentation/elements/notification/
+      document.addEventListener('DOMContentLoaded', () => {
+        (document.querySelectorAll('.notification .delete') || []).forEach(($delete) => {
+          const $notification = $delete.parentNode;
+
+          $delete.addEventListener('click', () => {
+            $notification.parentNode.removeChild($notification);
+          });
+        });
+      });
+    </script>
+
+</html>
