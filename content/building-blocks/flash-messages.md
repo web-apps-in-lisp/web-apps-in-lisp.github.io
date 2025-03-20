@@ -99,7 +99,18 @@ For this, we use Hunchentoot's life cycle and CLOS-orientation:
   (ht:delete-session-value :flash))
 ```
 
-which means: after we have handled the current request, delete the `:flash` object from the session.
+which means: after we have handled a request, delete the
+`:flash` object from the session.
+
+{{% notice warning %}}
+
+If your application sends API requests in JavaScript, they can delete flash messages without you noticing. Read more below.
+
+An external API request (from the command line for example) is not
+concerned, as it doesn't carry Hunchentoot session cookies.
+
+{{% /notice %}}
+
 
 ## Render flash messages in templates
 
@@ -269,3 +280,45 @@ you'll see a flash message, that is deleted after use.
 Refresh the page, and you won't see the flash message again.
 
 - full code: https://github.com/web-apps-in-lisp/web-apps-in-lisp.github.io/blob/master/content/building-blocks/flash-messages.lisp
+
+## Discussing: Flash messages and API calls
+
+Our `:after` method on the Hunchentoot request lifecycle will delete
+flash messages for any request that carries the session cookies. If
+your application makes API calls, you can use the Fetch method with
+the `{credentials: "omit"}` parameter:
+
+~~~javascript
+fetch("http://localhost:9876/api/", {
+  credentials: "omit"
+})
+~~~
+
+Otherwise, don't use this `:after` method and delete flash messages
+explicitely in your non-API routes.
+
+We could use a macro shortcut for this:
+
+
+~~~lisp
+(defmacro with-flash-messages ((messages) &body body)
+  `(let ((,messages (ht:session-value :flash)))
+     (prog1
+         (progn
+           ,@body)
+       (ht:delete-session-value :flash))))
+~~~
+
+Use it like this:
+
+~~~lisp
+(easy-routes:defroute flash-route ("/flash/" :method :get) ()
+  (with-flash-messages (messages)
+    (djula:render-template*  *flash-template* nil
+                             :flashes (or messages
+                                          (list (cons "is-primary" "No more flash messages were found in the session. This is a default notification."))))))
+~~~
+
+We want our macro to return the result of `djula:render-template*`,
+and *not* the result of `ht:delete-session-value`, that is nil, hence
+the "prog1/ progn" dance.
