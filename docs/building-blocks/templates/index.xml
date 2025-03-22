@@ -2,4 +2,4 @@
 Install it if you didn’t already:
 (ql:quickload "djula") The Caveman framework uses it by default, but otherwise it is not difficult to setup. We must declare where our templates live with something like:
 (djula:add-template-directory (asdf:system-relative-pathname "myproject" "templates/")) and then we can declare and compile the ones we use, for example::
-(defparameter +base.html+ (djula:compile-template* "base.html")) (defparameter +products.html+ (djula:compile-template* "products.html")) A Djula template looks like this:</description><generator>Hugo</generator><language>en-us</language><atom:link href="http://example.org/building-blocks/templates/index.xml" rel="self" type="application/rss+xml"/></channel></rss>
+(defparameter +base.html+ (djula:compile-template* "base.html")) (defparameter +products.html+ (djula:compile-template* "products.html")) Info If you get an error message when calling add-template-directory like this</description><generator>Hugo</generator><language>en-us</language><atom:link href="http://example.org/building-blocks/templates/index.xml" rel="self" type="application/rss+xml"/></channel></rss>
