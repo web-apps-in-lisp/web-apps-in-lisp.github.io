@@ -29,6 +29,25 @@ and then we can declare and compile the ones we use, for example::
 (defparameter +products.html+ (djula:compile-template* "products.html"))
 ~~~
 
+{{% notice info %}}
+
+If you get an error message when calling `add-template-directory` like this
+
+```
+The value
+  #P"/home/user/…/project/src/templates/index.html"
+
+is not of type
+  STRING
+from the function type declaration.
+   [Condition of type TYPE-ERROR]
+```
+
+then update your Quicklisp dist or clone Djula in `~/quicklisp/local-projects/`.
+
+{{% /notice %}}
+
+
 A Djula template looks like this:
 
 ```html
