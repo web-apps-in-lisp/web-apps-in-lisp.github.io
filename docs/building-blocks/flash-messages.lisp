@@ -33,6 +33,21 @@
 
 ;;; delete flash after it is used.
 (defmethod ht:handle-request :after (acceptor request)
+  (log:warn "----- deleting flash messages")
+  )
+
+(defmacro with-flash-messages ((messages) &body body)
+  `(let ((,messages (ht:session-value :flash)))
+     (prog1
+         (progn
+           ,@body)
+       (ht:delete-session-value :flash))))
+
+(with-flash-messages (msgs)
+  (print msgs))
+
+(let ((messages (ht:session-value :flash)))
+  (print messages)
   (ht:delete-session-value :flash))
 
 #+another-solution
@@ -47,15 +62,20 @@
 
 (easy-routes:defroute flash-route ("/flash/" :method :get) ()
   #-another-solution
-  (djula:render-template*  *flash-template* nil
-                           :flashes (or (ht:session-value :flash)
-                                        (list (cons "is-primary" "No more flash messages were found in the session. This is a default notification."))))
+  (with-flash-messages (messages)
+    (djula:render-template*  *flash-template* nil
+                             :flashes (or messages
+                                          (list (cons "is-primary" "No more flash messages were found in the session. This is a default notification.")))))
   #+another-solution
   (render *flash-template*)
   )
 
+(easy-routes:defroute flash-steal-route ("/api/steal/") ()
+  "api result")
+
 (easy-routes:defroute flash-redirect-route ("/tryflash/") ()
   (flash "is-warning" "This is a warning message held in the session. It should appear only once: reload this page and you won't see the flash message again.")
+  (sleep 10)
   (ht:redirect "/flash/"))
 
 (defun start (&key (port *port*))
