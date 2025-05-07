@@ -341,9 +341,12 @@ Building binaries with SBCL is done with the function
 `sb-ext:save-lisp-and-die` (it lives in the `sb-ext` SBCL module, that
 is available by default).
 
-Other implementations don't define the exact same function, that's why
-we need a compatibility layer, which is provided by ASDF. We show this
-method in the Cookbook and later in this guide.
+Other implementations don't define the exact same function, for
+instance on Clozure CL the function is `ccl:save-application`. That's
+why we'll want a compatibility layer to write a portable script across
+implementations. It is as always provided by ASDF with
+`uiop:dump-image` and also with a system declaration in the .asd
+files.
 
 SBCL binaries are portable from and to the same operating system:
 build on GNU/Linux, run on GNU/Linux. Or build on a CI system on the 3
