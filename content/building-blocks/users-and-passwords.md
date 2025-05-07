@@ -4,15 +4,13 @@ weight = 130
 +++
 
 We don't know of a Common Lisp framework that will create users and
-roles for you and protect your routes. You'll have to either write
-some Lisp, either use an external tool (such as Keycloak) that will
-provide all the user management.
+roles for you and protect your routes all at the same time. We have
+building blocks but you'll have to either write some glue Lisp code.
 
-{{% notice info %}}
+You can also turn to an external tool (such as Keycloak) that will
+provide all the industrial-grade user management.
 
-Stay tuned! We are on to something.
-
-{{% /notice %}}
+If you like the Mito ORM, look at [mito-auth](https://github.com/fukamachi/mito-auth/) and [mito-email-auth](https://github.com/40ants/mito-email-auth).
 
 
 ## Creating users
@@ -133,3 +131,12 @@ library.
 ```
 
 *Credit: `/u/arvid` on [/r/learnlisp](https://www.reddit.com/r/learnlisp/comments/begcf9/can_someone_give_me_an_eli5_on_hiw_to_encrypt_and/)*.
+
+## See also
+
+* [cl-authentic](https://github.com/charJe/cl-authentic) -  Password management for Common Lisp (web) applications. [LLGPL][8].
+  - safe password storage: cleartext-free, using your choice of hash algorithm through ironclad, storage in an SQL database,
+  - password reset mechanism with one-time tokens (suitable for mailing to users for confirmation),
+  - user creation optionally with confirmation tokens (suitable for mailing to users),
+
+and more on the awesome-cl list.

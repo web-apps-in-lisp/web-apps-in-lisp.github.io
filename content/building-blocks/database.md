@@ -232,7 +232,7 @@ Once we edit the table definition (aka the class definition), Mito
 will (by default) automatically migrate it.
 
 There is much more to say, but we refer you to Mito's good
-documentation and to the Cookbook.
+documentation and to the Cookbook (links below).
 
 ## How to integrate the databases into the web frameworks
 
