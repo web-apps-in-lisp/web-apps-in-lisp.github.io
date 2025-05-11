@@ -326,6 +326,9 @@ Remarks:
 ## Full code
 
 ```lisp
+(defpackage :myproject
+  (:use :cl))
+
 (in-package :myproject)
 
 ;; User-facing paramaters.
@@ -433,8 +436,7 @@ Remarks:
 ;; Server.
 (defun start-server (&key (port *port*))
   (format t "~&Starting the login demo on port ~a~&" port)
-  (unless *server*
-    (setf *server* (make-instance 'hunchentoot:easy-acceptor :port port)))
+  (setf *server* (make-instance 'easy-routes:easy-routes-acceptor :port port))
   (hunchentoot:start *server*))
 
 (defun stop-server ()
