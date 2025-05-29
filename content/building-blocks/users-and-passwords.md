@@ -5,9 +5,9 @@ weight = 130
 
 We don't know of a Common Lisp framework that will create users and
 roles for you and protect your routes all at the same time. We have
-building blocks but you'll have to either write some glue Lisp code.
+building blocks but you'll have to write some glue Lisp code.
 
-You can also turn to an external tool (such as Keycloak) that will
+You can also turn to external tools (such as [Keycloak](https://www.keycloak.org/) or [Tesseral](https://tesseral.com/)) that will
 provide all the industrial-grade user management.
 
 If you like the Mito ORM, look at [mito-auth](https://github.com/fukamachi/mito-auth/) and [mito-email-auth](https://github.com/40ants/mito-email-auth).
