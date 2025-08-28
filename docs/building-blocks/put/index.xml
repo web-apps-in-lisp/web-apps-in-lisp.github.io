@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>PUT and request parameters :: Web Apps in Lisp: Know-how</title><link>http://example.org/building-blocks/put/index.html</link><description>To access the body parameters of a PUT request, one must add :PUT to hunchentoot:*methods-for-post-parameters*, which defaults to only (:POST):
+(push :put hunchentoot:*methods-for-post-parameters*) This parameter:
+is a list of the request method types (as keywords) for which Hunchentoot will try to compute POST-PARAMETERS.
+No such setting is required with Lack and Ningle.</description><generator>Hugo</generator><language>en-us</language><atom:link href="http://example.org/building-blocks/put/index.xml" rel="self" type="application/rss+xml"/></channel></rss>
